@@ -3,7 +3,7 @@ package com.easywheels;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-// probando si puedo realizar modificaciones
+// probando si puedo realizar modificaciones a
 @SpringBootApplication
 public class EasyWheelsApplication {
 
