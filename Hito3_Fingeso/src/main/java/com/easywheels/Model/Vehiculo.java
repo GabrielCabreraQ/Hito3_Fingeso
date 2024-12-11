@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity     // Indicamos a Spring que es un objeto entidad
-@Table(name = "vehiculo")     // Crea la tabla vehiculo en la base de datos
+@Entity     // Indicamos a Spring que es un objeto entidad para la tabla vehiculo
 public class Vehiculo {
 
     // Atributos
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)     // Id automatico
-    private long idVehiculo;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)     // Genera Id automatico
+    private Long idVehiculo;
     private String marca;
     private String modelo;
     //private String color;             Este atributo no esstaba en el diagrama de clases

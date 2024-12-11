@@ -1,17 +1,31 @@
 package com.easywheels.Model;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
 public class Arriendo {             //Falta relacioanr con la baseee
 
     // Atributos
-    private Vehiculo vehiculo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)      // se relaciona con el atri clienteID y no puede ser null
     private Arrendatario arrendatario;
+
+    @ManyToOne
+    @JoinColumn(name = "vehiculo_id", nullable = false)
+    private Vehiculo vehiculo;
+
     private int precio;
     private Date fechaInicio;
     private Date fechaFin;
     private Boolean conformidad;
     private Boolean cancelado;
+    @Transient
     private Boleta boleta = new Boleta();
 
     // Constructor
@@ -26,6 +40,7 @@ public class Arriendo {             //Falta relacioanr con la baseee
         this.conformidad = conformidad;
         this.cancelado = cancelado;
     }
+    public Arriendo() {}
 
     // Getters y setters
     public Vehiculo getVehiculo() {

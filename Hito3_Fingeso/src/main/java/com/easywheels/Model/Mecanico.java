@@ -1,10 +1,12 @@
 package com.easywheels.Model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 import java.util.Date;
 
 @Entity
+@DiscriminatorValue("mecanico")
 public class Mecanico extends Usuario{
 
     // Atributos
@@ -15,9 +17,9 @@ public class Mecanico extends Usuario{
 
     public Mecanico(long idUsuario, String nombreUsuario, String correoUsuario,
                     String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento,
-                    String rol, String especialidad, String departamento) {
+                    String especialidad, String departamento) {
         super(idUsuario, nombreUsuario, correoUsuario, contraseniaUsuario,
-                telefonoUsuario, fechaNacimiento, rol);
+                telefonoUsuario, fechaNacimiento);
         this.especialidad = especialidad;
         this.departamento = departamento;
     }

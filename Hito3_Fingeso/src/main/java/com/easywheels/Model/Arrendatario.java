@@ -1,12 +1,12 @@
 package com.easywheels.Model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("arrendatario")
 public class Arrendatario extends Usuario{
 
     // Atributos
@@ -14,13 +14,15 @@ public class Arrendatario extends Usuario{
     private List<String> tipoLicencia;
     @ElementCollection
     private List<String> documentos;
+    //@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    //private List<Arriendo> arriendos;
 
     // Constructor
     public Arrendatario(long idUsuario, String nombreUsuario, String correoUsuario,
                         String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento,
-                        String rol, List<String> tipoLicencia, List<String> documentos) {
+                        List<String> tipoLicencia, List<String> documentos) {
         super(idUsuario, nombreUsuario, correoUsuario, contraseniaUsuario, telefonoUsuario,
-                fechaNacimiento, rol);
+                fechaNacimiento);
         this.tipoLicencia = tipoLicencia;
         this.documentos = documentos;
     }

@@ -1,10 +1,18 @@
 package com.easywheels.Model;
 
+import jakarta.persistence.*;
+
 import java.util.List;
 
-public class Catalogo {                                 // Falta relacionar con la base de datos
+@Entity
+public class Catalogo {
 
     // Atributos
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(mappedBy = "localidad", cascade = CascadeType.ALL)
     private List<Publicacion> disponibles;
     private String departamento;
 
@@ -13,6 +21,7 @@ public class Catalogo {                                 // Falta relacionar con 
         this.disponibles = disponibles;
         this.departamento = departamento;
     }
+    public Catalogo() {}
 
     // Getters y setters
     public List<Publicacion> getDisponibles() {

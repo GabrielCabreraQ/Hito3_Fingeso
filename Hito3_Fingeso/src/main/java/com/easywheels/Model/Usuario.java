@@ -1,10 +1,19 @@
 package com.easywheels.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)   // Indicamos estrategia de tabla unica para las clases heredadas
+@DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)   // nombrar a atributo tipo user
+@Data                       // Lombok agrega getters y setters
+@AllArgsConstructor         // Lombok agrega constructor con todos los argumentos
+@NoArgsConstructor          // Lombok agrega constructor vacio
 public abstract class Usuario {
 
     // Atributos
@@ -16,25 +25,37 @@ public abstract class Usuario {
     private String contraseniaUsuario;
     private String telefonoUsuario;
     private Date fechaNacimiento;
-    private String rol;         // De igual modo hay que heredar para crear tipo de user
-    //@ElementCollection
-    //private List<Notificacion> notificaciones;                                           // Agregar posteriormente
+    //private String rol;         // De igual modo hay que heredar para crear tipo de user
+    @Transient
+    private List<Notificacion> notificaciones;                                           // Agregar posteriormente
 
     //Constructor
-    public Usuario(long idUsuario, String nombreUsuario, String correoUsuario,
-                   String contraseniaUsuario, String telefonoUsuario,
-                   Date fechaNacimiento, String rol) {
+    /*
+    public Usuario(long idUsuario, String nombreUsuario, String correoUsuario, String contraseniaUsuario,
+                   String telefonoUsuario, Date fechaNacimiento, List<Notificacion> notificaciones) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.correoUsuario = correoUsuario;
         this.contraseniaUsuario = contraseniaUsuario;
         this.telefonoUsuario = telefonoUsuario;
         this.fechaNacimiento = fechaNacimiento;
-        this.rol = rol;
+        this.notificaciones = notificaciones;
+    }*/
+    // Constructor sin lista de notificaciones
+    public Usuario(long idUsuario, String nombreUsuario, String correoUsuario, String contraseniaUsuario,
+                   String telefonoUsuario, Date fechaNacimiento) {
+        this.idUsuario = idUsuario;
+        this.nombreUsuario = nombreUsuario;
+        this.correoUsuario = correoUsuario;
+        this.contraseniaUsuario = contraseniaUsuario;
+        this.telefonoUsuario = telefonoUsuario;
+        this.fechaNacimiento = fechaNacimiento;
     }
-    public Usuario() {}
+
+    //public Usuario() {}
 
     // Getters y Setters
+    /*
     public long getIdUsuario() {
         return idUsuario;
     }
@@ -83,11 +104,11 @@ public abstract class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getRol() {
-        return rol;
+    public List<Notificacion> getNotificaciones() {
+        return notificaciones;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
+    public void setNotificaciones(List<Notificacion> notificaciones) {
+        this.notificaciones = notificaciones;
+    }*/
 }

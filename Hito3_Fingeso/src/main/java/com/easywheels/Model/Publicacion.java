@@ -1,26 +1,25 @@
 package com.easywheels.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-//@Entity
+@Entity
 public class Publicacion {
 
     // Atributos
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idPublicacion;
-    private Vehiculo vehiculo;                                      // Indagar como relacionar para crear las tablas
+
+    @OneToOne
+    @JoinColumn(name = "vehiculo_id")
+    private Vehiculo vehiculo;
+
     private int precioNormal;
     private String localidad;
     private String codigoACRISS;
     private Boolean visibilidad;
 
-    // Consctructor
-
-
+    // Constructor
     public Publicacion(long idPublicacion, Vehiculo vehiculo, int precioNormal,
                        String localidad, String codigoACRISS, Boolean visibilidad) {
         this.idPublicacion = idPublicacion;
@@ -30,6 +29,7 @@ public class Publicacion {
         this.codigoACRISS = codigoACRISS;
         this.visibilidad = visibilidad;
     }
+    public Publicacion() {}
 
     // Getters y Setters
     public long getIdPublicacion() {
