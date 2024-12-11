@@ -1,11 +1,17 @@
 package com.easywheels.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
-public class Arriendo {             //Falta relacioanr con la baseee
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Arriendo {
 
     // Atributos
     @Id
@@ -28,7 +34,7 @@ public class Arriendo {             //Falta relacioanr con la baseee
     @Transient
     private Boleta boleta = new Boleta();
 
-    // Constructor
+    // Constructor sin Boleta
     public Arriendo(Vehiculo vehiculo, Arrendatario arrendatario,
                     int precio, Date fechaInicio, Date fechaFin,
                     Boolean conformidad, Boolean cancelado) {
@@ -40,70 +46,5 @@ public class Arriendo {             //Falta relacioanr con la baseee
         this.conformidad = conformidad;
         this.cancelado = cancelado;
     }
-    public Arriendo() {}
 
-    // Getters y setters
-    public Vehiculo getVehiculo() {
-        return vehiculo;
-    }
-
-    public void setVehiculo(Vehiculo vehiculo) {
-        this.vehiculo = vehiculo;
-    }
-
-    public Arrendatario getArrendatario() {
-        return arrendatario;
-    }
-
-    public void setArrendatario(Arrendatario arrendatario) {
-        this.arrendatario = arrendatario;
-    }
-
-    public int getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(int precio) {
-        this.precio = precio;
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public Boolean getConformidad() {
-        return conformidad;
-    }
-
-    public void setConformidad(Boolean conformidad) {
-        this.conformidad = conformidad;
-    }
-
-    public Boolean getCancelado() {
-        return cancelado;
-    }
-
-    public void setCancelado(Boolean cancelado) {
-        this.cancelado = cancelado;
-    }
-
-    public Boleta getBoleta() {
-        return boleta;
-    }
-
-    public void setBoleta(Boleta boleta) {
-        this.boleta = boleta;
-    }
 }

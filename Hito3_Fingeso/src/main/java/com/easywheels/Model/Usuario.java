@@ -29,18 +29,6 @@ public abstract class Usuario {
     @Transient
     private List<Notificacion> notificaciones;                                           // Agregar posteriormente
 
-    //Constructor
-    /*
-    public Usuario(long idUsuario, String nombreUsuario, String correoUsuario, String contraseniaUsuario,
-                   String telefonoUsuario, Date fechaNacimiento, List<Notificacion> notificaciones) {
-        this.idUsuario = idUsuario;
-        this.nombreUsuario = nombreUsuario;
-        this.correoUsuario = correoUsuario;
-        this.contraseniaUsuario = contraseniaUsuario;
-        this.telefonoUsuario = telefonoUsuario;
-        this.fechaNacimiento = fechaNacimiento;
-        this.notificaciones = notificaciones;
-    }*/
     // Constructor sin lista de notificaciones
     public Usuario(long idUsuario, String nombreUsuario, String correoUsuario, String contraseniaUsuario,
                    String telefonoUsuario, Date fechaNacimiento) {
@@ -52,63 +40,5 @@ public abstract class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    //public Usuario() {}
 
-    // Getters y Setters
-    /*
-    public long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getCorreoUsuario() {
-        return correoUsuario;
-    }
-
-    public void setCorreoUsuario(String correoUsuario) {
-        this.correoUsuario = correoUsuario;
-    }
-
-    public String getContraseniaUsuario() {
-        return contraseniaUsuario;
-    }
-
-    public void setContraseniaUsuario(String contraseniaUsuario) {
-        this.contraseniaUsuario = contraseniaUsuario;
-    }
-
-    public String getTelefonoUsuario() {
-        return telefonoUsuario;
-    }
-
-    public void setTelefonoUsuario(String telefonoUsuario) {
-        this.telefonoUsuario = telefonoUsuario;
-    }
-
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public List<Notificacion> getNotificaciones() {
-        return notificaciones;
-    }
-
-    public void setNotificaciones(List<Notificacion> notificaciones) {
-        this.notificaciones = notificaciones;
-    }*/
 }
