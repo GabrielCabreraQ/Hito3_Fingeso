@@ -29,16 +29,6 @@ public abstract class Usuario {
     @Transient
     private List<Notificacion> notificaciones;                                           // Agregar posteriormente
 
-    // Constructor sin lista de notificaciones
-    public Usuario(long idUsuario, String nombreUsuario, String correoUsuario, String contraseniaUsuario,
-                   String telefonoUsuario, Date fechaNacimiento) {
-        this.idUsuario = idUsuario;
-        this.nombreUsuario = nombreUsuario;
-        this.correoUsuario = correoUsuario;
-        this.contraseniaUsuario = contraseniaUsuario;
-        this.telefonoUsuario = telefonoUsuario;
-        this.fechaNacimiento = fechaNacimiento;
-    }
 
 
 }

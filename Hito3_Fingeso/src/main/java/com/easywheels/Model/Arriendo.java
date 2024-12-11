@@ -19,7 +19,7 @@ public class Arriendo {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)      // se relaciona con el atri clienteID y no puede ser null
+    @JoinColumn(name = "cliente_id", nullable = false) // se relaciona con el atri clienteID y no puede ser null
     private Arrendatario arrendatario;
 
     @ManyToOne
