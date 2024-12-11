@@ -18,7 +18,7 @@ public class Catalogo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "localidad", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "catalogo", cascade = CascadeType.ALL)   // si se eliimna un catalogo, tambien sus publicaciones
     private List<Publicacion> disponibles;
     private String departamento;
 

@@ -21,9 +21,12 @@ public class Publicacion {
     private Vehiculo vehiculo;
 
     private int precioNormal;
-    private String localidad;
     private String codigoACRISS;
     private Boolean visibilidad;
+
+    @ManyToOne
+    @JoinColumn(name = "catalogo_id", nullable = false)
+    private Catalogo catalogo;
 
 
 }
