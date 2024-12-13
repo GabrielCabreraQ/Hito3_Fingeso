@@ -1,5 +1,6 @@
 package com.easywheels.Model;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -8,6 +9,11 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)   // Indicamos estrategia de tabla unica para las clases heredadas
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)   // nombrar a atributo tipo user
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "tipo_usuario"
+)
 public abstract class Usuario {
 
     // Atributos
