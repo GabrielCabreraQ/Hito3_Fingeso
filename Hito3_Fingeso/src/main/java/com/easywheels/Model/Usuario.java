@@ -26,8 +26,8 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    public Usuario(long idUsuario, String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento, List<Notificacion> notificaciones) {
-        this.idUsuario = idUsuario;
+    // Constructor sin el ID
+    public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento, List<Notificacion> notificaciones) {
         this.nombreUsuario = nombreUsuario;
         this.correoUsuario = correoUsuario;
         this.contraseniaUsuario = contraseniaUsuario;

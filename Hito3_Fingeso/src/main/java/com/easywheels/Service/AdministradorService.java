@@ -15,22 +15,21 @@ public class AdministradorService {
 
     // CRUD
 
-    // Crear un nuevo Administrador
+    // CREATE
     public Administrador crearAdministrador(Administrador administrador) {
         return administradorRepository.save(administrador);
     }
 
-    // Obtener todos los Administradores
+    //GET
     public List<Administrador> obtenerAdministradores() { // Cambiado a Administrador
         return administradorRepository.findAll();
     }
 
-    // Obtener un Administrador por ID
     public Optional<Administrador> obtenerAdministradorPorId(Long id) { // Cambiado a Administrador
         return administradorRepository.findById(id);
     }
 
-    // Actualizar un Administrador
+    //PUT
     public Administrador actualizarAdministrador(Long id, Administrador administrador) {
         if (administradorRepository.existsById(id)) {
             administrador.setIdUsuario(id);

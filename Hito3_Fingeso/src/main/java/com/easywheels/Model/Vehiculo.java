@@ -3,36 +3,35 @@ package com.easywheels.Model;
 import jakarta.persistence.*;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity     // Indicamos a Spring que es un objeto entidad para la tabla vehiculo
 public class Vehiculo {
 
-    // Atributos
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)     // Genera Id automatico
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idVehiculo;
 
     private String marca;
     private String modelo;
-    //private String color;             Este atributo no esstaba en el diagrama de clases
     private int anio;
     private String tipoTransmision;
     private String categoria;
     private String tipoCuerpo;
     private String combustibleAC;
 
-    @ElementCollection          // Esto es asi?????? muchas preguntas pocas respuestas
-    private List<Date> disponibilidad;
+    @ElementCollection
+    private List<LocalDate> disponibilidad; // List<LocalDate>
 
     private Boolean devuelto;
 
     public Vehiculo() {
     }
 
-    public Vehiculo(Long idVehiculo, String marca, String modelo, int anio, String tipoTransmision, String categoria, String tipoCuerpo, String combustibleAC, List<Date> disponibilidad, Boolean devuelto) {
-        this.idVehiculo = idVehiculo;
+    public Vehiculo(String marca, String modelo, int anio, String tipoTransmision,
+                    String categoria, String tipoCuerpo, String combustibleAC, List<LocalDate> disponibilidad,
+                    Boolean devuelto) {
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
@@ -108,11 +107,11 @@ public class Vehiculo {
         this.combustibleAC = combustibleAC;
     }
 
-    public List<Date> getDisponibilidad() {
+    public List<LocalDate> getDisponibilidad() {
         return disponibilidad;
     }
 
-    public void setDisponibilidad(List<Date> disponibilidad) {
+    public void setDisponibilidad(List<LocalDate> disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
 

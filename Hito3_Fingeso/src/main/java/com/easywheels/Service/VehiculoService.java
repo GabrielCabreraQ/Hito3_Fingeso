@@ -1,7 +1,7 @@
 package com.easywheels.Service;
 
 import com.easywheels.Repository.VehiculoRepository;
-import  com.easywheels.Model.Vehiculo;
+import com.easywheels.Model.Vehiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +9,8 @@ import java.util.List;
 
 @Service
 public class VehiculoService {
-    @Autowired       // Inyectar dependencias automaticaente en Spring
-    private VehiculoRepository vehiculoRepository;      // Llamada al repo
+    @Autowired
+    private VehiculoRepository vehiculoRepository;
 
     public VehiculoService(VehiculoRepository vehiculoRepository) {
         this.vehiculoRepository = vehiculoRepository;
@@ -23,18 +23,17 @@ public class VehiculoService {
         }
     }
 
-
     // CRUD con validación de permisos
     // Create
     public Vehiculo createVehiculo(Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
-        return vehiculoRepository.save(vehiculo);
+        return vehiculoRepository.save(vehiculo); // No necesitas establecer el ID
     }
 
     // Read
-    public Vehiculo getVehiculoById(int id, String permiso) {
+    public Vehiculo getVehiculoById(Long id, String permiso) {
         verificarPermisosAdmin(permiso);
-        return vehiculoRepository.findById((long) id).orElse(null);
+        return vehiculoRepository.findById(id).orElse(null);
     }
 
     public List<Vehiculo> getAllVehiculos(String permiso) {
@@ -43,15 +42,21 @@ public class VehiculoService {
     }
 
     // Update
-    public Vehiculo updateVehiculo(Vehiculo vehiculo, String permiso) {
+    public Vehiculo updateVehiculo(Long id, Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
+
+        // Verifica si el vehiculo existe
+        if (!vehiculoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Vehículo con ID " + id + " no existe.");
+        }
+
+        vehiculo.setIdVehiculo(id); // Asegúrate de establecer el ID para la actualización
         return vehiculoRepository.save(vehiculo);
     }
 
     // Delete
-    public void deleteVehiculo(int id, String permiso) {
+    public void deleteVehiculo(Long id, String permiso) {
         verificarPermisosAdmin(permiso);
-        vehiculoRepository.deleteById((long) id);
+        vehiculoRepository.deleteById(id);
     }
-
 }
