@@ -5,7 +5,9 @@ import com.easywheels.Model.Vehiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VehiculoService {
@@ -58,5 +60,15 @@ public class VehiculoService {
     public void deleteVehiculo(Long id, String permiso) {
         verificarPermisosAdmin(permiso);
         vehiculoRepository.deleteById(id);
+    }
+
+    // Método que devuelve los vehículos disponibles en una fecha específica
+    public List<Vehiculo> obtenerVehiculosDisponibles(LocalDate fecha, String permiso) {
+        // Buscar vehículos que tengan la fecha en su lista de disponibilidad
+        verificarPermisosAdmin(permiso);
+        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
+        return vehiculos.stream()
+                .filter(vehiculo -> vehiculo.getDisponibilidad().contains(fecha))
+                .collect(Collectors.toList());
     }
 }

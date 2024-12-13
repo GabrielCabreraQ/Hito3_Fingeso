@@ -3,9 +3,11 @@ package com.easywheels.Controller;
 import com.easywheels.Model.Vehiculo;
 import com.easywheels.Service.VehiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -50,4 +52,10 @@ public class VehiculoController {
         vehiculoService.deleteVehiculo(id, permiso);
         return ResponseEntity.noContent().build(); // Retorna 204 No Content
     }
+    // Endpoint para obtener vehículos disponibles en una fecha específica
+    @GetMapping("/disponibles")
+    public List<Vehiculo> obtenerVehiculosDisponibles(@RequestParam("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha, @RequestParam String permiso) {
+        return vehiculoService.obtenerVehiculosDisponibles(fecha, permiso);
+    }
+
 }
