@@ -1,21 +1,13 @@
-select * from usuario;
-select * from arrendatario_tipo_licencia;
-select * from vehiculo;
-select * from publicacion;
-select * from catalogo;
-select * from arriendo;
-select * from vehiculo_disponibilidad;
-
 insert into usuario (id_usuario,nombre_usuario,correo_usuario,contrasenia_usuario,
-		telefono_usuario,fecha_nacimiento,tipo_usuario,departamento,especialidad)
+		telefono_usuario,fecha_nacimiento,tipo_usuario,departamento)
 values
-	(1,'Isaac Espinoza','piscolix@gmail.com','cc34','975956424','1991-04-09','administrador','Valdivia',null),
-	(2,'Benjamin Vicuña','wachito@gmail.com','estoyverde','972253424','2000-04-03','administrador','Valdivia',null),
-	(3,'Cristobal Briceño','fothermuckers@gmail.com','googlemija','975556424','1996-09-19','arrendatario',null,null),
-	(4,'Rodrigo Vasquez','altoyoyo@gmail.com','lavidita','956956424','1990-09-19','arrendatario',null,null),
-	(5,'Esteban Paredes','216@gmail.com','robateunatele','975955224','2002-02-23','arrendatario',null,null),
-	(6,'Juan Manuel Zolezzi','zolezzi@gmail.com','triplezeta','975956477','1900-05-20','administrador','Santiago',null),
-	(7,'Camila Vallejos','cami.va@gob.cl','elcomunismofunciona','947563381','1988-04-28','mecanico','Santiago','cambio aceite');
+	(1,'Isaac Espinoza','piscolix@gmail.com','cc34','975956424','1991-04-09','administrador','Valdivia'),
+	(2,'Benjamin Vicuña','wachito@gmail.com','estoyverde','972253424','2000-04-03','administrador','Valdivia'),
+	(3,'Cristobal Briceño','fothermuckers@gmail.com','googlemija','975556424','1996-09-19','arrendatario',null),
+	(4,'Rodrigo Vasquez','altoyoyo@gmail.com','lavidita','956956424','1990-09-19','arrendatario',null),
+	(5,'Esteban Paredes','216@gmail.com','robateunatele','975955224','2002-02-23','arrendatario',null),
+	(6,'Juan Manuel Zolezzi','zolezzi@gmail.com','triplezeta','975956477','1900-05-20','administrador','Santiago'),
+	(7,'Camila Vallejos','cami.va@gob.cl','elcomunismofunciona','947563381','1988-04-28','mecanico','Santiago');
 
 insert into arrendatario_documentos (arrendatario_id_usuario,documentos)
 values (3,'Cedulo Identidad');
