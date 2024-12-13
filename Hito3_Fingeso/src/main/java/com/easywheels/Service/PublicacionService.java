@@ -13,7 +13,7 @@ public class PublicacionService {
     @Autowired       // Inyectar dependencias automaticaente en Spring
     private PublicacionRepository publicacionRepository;      // Llamada al repo
 
-    // Método para verificar el permiso
+    // Metodo para verificar el permiso
     private void verificarPermisosAdmin(String permiso) {
         if (!"administrador".equals(permiso)) {
             throw new IllegalStateException("No tienes permisos para esta acción.");
@@ -50,7 +50,7 @@ public class PublicacionService {
         publicacionRepository.deleteById((long) id);
     }
 
-    // Método para visualizar un vehículo asociado a una publicación
+    // Metodo para visualizar un vehículo asociado a una publicación
     public String visualizarVehiculo(Publicacion publicacion) {
         if (publicacion == null || publicacion.getVehiculo() == null) {
             return "No hay información del vehículo para esta publicación.";

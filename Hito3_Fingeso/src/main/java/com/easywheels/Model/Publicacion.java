@@ -1,5 +1,8 @@
 package com.easywheels.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,10 +12,10 @@ public class Publicacion {
     // Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idPublicacion;
+    private Long idPublicacion;
 
     @OneToOne
-    @JoinColumn(name = "vehiculo_id")
+    @JoinColumn(name = "idVehiculo")
     private Vehiculo vehiculo;
 
     private int precioNormal;
@@ -20,9 +23,17 @@ public class Publicacion {
     private Boolean visibilidad;
 
     @ManyToOne
-    @JoinColumn(name = "catalogo_id", nullable = false)
+    @JoinColumn(name = "idCatalogo")
+    @JsonBackReference
+    @JsonIgnore
     private Catalogo catalogo;
 
+    @JsonGetter("IdCatalogo")       //Nombramos atributo idCatalogo para mandar en el json
+    public Long getCatalogoId() {
+        return catalogo != null ? catalogo.getIdCatalogo() : null;
+    }
+
+    // Constructores
     public Publicacion() {
     }
 
@@ -35,6 +46,7 @@ public class Publicacion {
         this.catalogo = catalogo;
     }
 
+    // Metodos
     public long getIdPublicacion() {
         return idPublicacion;
     }
