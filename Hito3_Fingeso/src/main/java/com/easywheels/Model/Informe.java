@@ -14,5 +14,5 @@ public class Informe {
     private String tipovehiculoMasArrendado;
     private String localidadVehiculoMasArrendado;
 
-    
+
 }
