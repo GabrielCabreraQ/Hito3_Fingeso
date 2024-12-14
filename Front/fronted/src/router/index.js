@@ -6,7 +6,7 @@ const routes = createRouter({
         {
             path: '/',
             name: 'Home',
-            component: () => import('../vistas/prueba.vue'),
+            component: () => import('../vistas/admin.vue'),
             alias: '/inicio',
         }
     ],
