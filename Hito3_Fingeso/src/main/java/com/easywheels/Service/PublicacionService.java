@@ -58,14 +58,33 @@ public class PublicacionService {
         verificarPermisosAdmin(permiso);
 
         // Verificar si la publicación existe
-        if (publicacionRepository.existsById(publicacion.getIdPublicacion())) {
-            // Actualizar la publicación en la base de datos
-            return publicacionRepository.save(publicacion);
-        } else {
-            // Si la publicación no existe, lanzar una excepción o devolver null
+        if (!publicacionRepository.existsById(publicacion.getIdPublicacion())) {
             throw new IllegalArgumentException("La publicación con ID " + publicacion.getIdPublicacion() + " no existe.");
         }
+
+        // Obtener la publicación existente desde la base de datos
+        Publicacion existingPublicacion = publicacionRepository.findById(publicacion.getIdPublicacion()).orElseThrow(() ->
+                new IllegalArgumentException("La publicación no existe.")
+        );
+
+        // Mantener el ID del catálogo existente si no se proporciona uno nuevo
+        if (existingPublicacion.getCatalogo() != null && publicacion.getCatalogo() == null) {
+            publicacion.setCatalogo(existingPublicacion.getCatalogo());
+        }
+
+        // Actualizar otros campos
+        existingPublicacion.setPrecioNormal(publicacion.getPrecioNormal());
+        existingPublicacion.setCodigoACRISS(publicacion.getCodigoACRISS());
+        existingPublicacion.setVisibilidad(publicacion.getVisibilidad());
+        existingPublicacion.setVehiculo(publicacion.getVehiculo());
+
+        // No se modifica el ID del catálogo si ya tiene uno y no viene en el JSON
+        existingPublicacion.setCatalogo(publicacion.getCatalogo());
+
+        // Guardar y retornar la publicación actualizada
+        return publicacionRepository.save(existingPublicacion);
     }
+
 
     // Delete
     public boolean deletePublicacion(int id, String permiso) {
