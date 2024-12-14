@@ -81,4 +81,12 @@ public class AdministradorService {
         return publicacionService.deletePublicacion(id, permiso);
     }
 
+    //Metodo para actualizar o modificar una publicacion
+    public Publicacion updatePublicacion(int id, Publicacion publicacion, String permiso) {
+        // Establecer el ID de la publicación a actualizar
+        publicacion.setIdPublicacion(id);
+        // Llamar al método del servicio de publicación para actualizar
+        return publicacionService.updatePublicacion(publicacion, permiso);
+    }
+
 }

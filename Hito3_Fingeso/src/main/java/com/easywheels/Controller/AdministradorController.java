@@ -88,6 +88,19 @@ public class AdministradorController {
     }
 
 
+    //Controlador para actualizar una publicacion
+    @PutMapping("/{id}/updatePublicacion")
+    public ResponseEntity<Publicacion> updatePublicacion(@PathVariable int id, @RequestBody Publicacion publicacion) {
+        // Aquí, el permiso podría ser obtenido de la sesión del usuario autenticado o ser parte del objeto Administrador
+        String permiso = "administrador"; // Cambia esto por la lógica de permisos adecuada
+
+        Publicacion updatedPublicacion = administradorService.updatePublicacion(id, publicacion, permiso);
+        return updatedPublicacion != null ? ResponseEntity.ok(updatedPublicacion) : ResponseEntity.notFound().build();
+    }
+
+
+
+
 
 
 }
