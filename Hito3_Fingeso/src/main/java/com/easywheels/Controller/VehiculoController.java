@@ -53,9 +53,23 @@ public class VehiculoController {
 
     // Actualizar un vehículo
     @PutMapping("/{id}")
-    public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable Long id, @RequestBody Vehiculo vehiculo, @RequestParam String permiso) {
-        Vehiculo vehiculoActualizado = vehiculoService.updateVehiculo(id, vehiculo, permiso);
-        return ResponseEntity.ok(vehiculoActualizado); // Retorna el vehículo actualizado
+    public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable Long id,
+                                                   @RequestBody Vehiculo vehiculo,
+                                                   @RequestParam String permiso) {
+        try {
+            Vehiculo vehiculoActualizado = vehiculoService.updateVehiculo(id, vehiculo, permiso);
+            if (vehiculoActualizado != null) {
+                return ResponseEntity.ok(vehiculoActualizado);
+            } else {
+                return ResponseEntity.notFound().build(); // Retorna 404 si no se encuentra el vehículo
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build(); // Retorna 404 si no se encuentra el vehículo
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN); // Error de permisos
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); // Otro error
+        }
     }
 
     // Eliminar un vehículo

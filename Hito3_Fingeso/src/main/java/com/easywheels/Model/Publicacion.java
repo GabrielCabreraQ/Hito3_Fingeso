@@ -37,8 +37,7 @@ public class Publicacion {
     public Publicacion() {
     }
 
-    public Publicacion(long idPublicacion, Vehiculo vehiculo, int precioNormal, String codigoACRISS, Boolean visibilidad, Catalogo catalogo) {
-        this.idPublicacion = idPublicacion;
+    public Publicacion( Vehiculo vehiculo, int precioNormal, String codigoACRISS, Boolean visibilidad, Catalogo catalogo) {
         this.vehiculo = vehiculo;
         this.precioNormal = precioNormal;
         this.codigoACRISS = codigoACRISS;

@@ -50,12 +50,13 @@ public class VehiculoService {
     // Update
     public Vehiculo updateVehiculo(Long id, Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
-        if (!vehiculoRepository.existsById(id)) {
-            throw new IllegalArgumentException("Vehículo con ID " + id + " no existe.");
+        if (vehiculoRepository.existsById(id)) {
+            vehiculo.setIdVehiculo(id);
+            return vehiculoRepository.save(vehiculo);
         }
-        vehiculo.setIdVehiculo(id); // Asegúrate de establecer el ID para la actualización
-        return vehiculoRepository.save(vehiculo);
+        return null;
     }
+
 
     // Delete
     public void deleteVehiculo(Long id, String permiso) {
