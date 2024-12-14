@@ -73,7 +73,7 @@ public class AdministradorService {
         if (!publicacion.getVisibilidad()) {
             return "La publicación no está disponible.";
         }
-        return publicacion.toString(); // Aquí asumo que Publicacion tiene un método toString bien definido
+        return publicacion.toString();
     }
     // Método para eliminar una publicación
 

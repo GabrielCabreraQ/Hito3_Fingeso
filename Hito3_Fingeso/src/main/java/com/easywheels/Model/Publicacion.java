@@ -93,4 +93,21 @@ public class Publicacion {
     public void setCatalogo(Catalogo catalogo) {
         this.catalogo = catalogo;
     }
+
+    @Override
+    public String toString() {
+        return "----Publicacion----\n\n" +
+                "- Marca del vehiculo: " + getVehiculo().getMarca() + "\n" +
+                "- Año: " + getVehiculo().getAnio() + "\n" +
+                "- Tipo de transmision: " + getVehiculo().getTipoTransmision() + "\n" +
+                "- Categoria: " + getVehiculo().getCategoria() + "\n" +
+                "- Tipo de cuerpo: " + getVehiculo().getTipoCuerpo() + "\n" +
+                "- Precio: " + getPrecioNormal() + "\n" +
+                "- Combustible/AC: " + getVehiculo().getCombustibleAC() + "\n" +
+                "- Disponibilidad: " + getVehiculo().getDisponibilidad() + "\n\n" +
+
+                "- precioNormal=" + getPrecioNormal() + "\n" +
+                "- codigoACRISS='" + getCodigoACRISS() + "\n" +
+                "- visibilidad=" + getVisibilidad();
+    }
 }
