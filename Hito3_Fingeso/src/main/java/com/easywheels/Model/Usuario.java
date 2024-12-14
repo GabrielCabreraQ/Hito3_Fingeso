@@ -42,6 +42,15 @@ public abstract class Usuario {
         this.notificaciones = notificaciones;
     }
 
+    //constructor para el registro
+    public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento) {
+        this.nombreUsuario = nombreUsuario;
+        this.correoUsuario = correoUsuario;
+        this.contraseniaUsuario = contraseniaUsuario;
+        this.telefonoUsuario = telefonoUsuario;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public long getIdUsuario() {
         return idUsuario;
     }
