@@ -1,6 +1,7 @@
 package com.easywheels.Service;
 
-import com.easywheels.Model.Administrador; // Asegúrate de importar Administrador
+import com.easywheels.Model.Administrador;
+import com.easywheels.Model.Vehiculo;
 import com.easywheels.Repository.AdministradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import java.util.Optional;
 public class AdministradorService {
     @Autowired // Inyectar dependencias automáticamente en Spring
     private AdministradorRepository administradorRepository; // Llamada al repo
+
+    @Autowired
+    private VehiculoService vehiculoService; // variable para crear un vehiculo
 
     // CRUD
 
@@ -41,5 +45,11 @@ public class AdministradorService {
     // Eliminar un Administrador
     public void eliminarAdministrador(Long id) {
         administradorRepository.deleteById(id);
+    }
+
+
+    //Metodo publicar vehiculo
+    public Vehiculo crearVehiculo(Vehiculo vehiculo, String permiso) {
+        return vehiculoService.createVehiculo(vehiculo, permiso);
     }
 }
