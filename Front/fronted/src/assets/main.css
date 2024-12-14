@@ -1,10 +1,11 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 100%; /* Eliminado max-width de 1280px */
+  margin: 0;
+  padding: 0; /* Eliminado padding adicional */
   font-weight: normal;
+  height: 100%; /* Asegura que ocupe toda la pantalla */
 }
 
 a,
@@ -21,15 +22,57 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+/* Asegurar que el cuerpo de la página ocupe todo el espacio */
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Asegura que el body ocupe toda la pantalla */
+  width: 100%;
+  display: flex; /* Centra los elementos de manera flexible */
+  justify-content: center;
+  align-items: center;
+}
 
+/* Cambios en #app para ocupar todo el ancho y altura de la página */
+@media (min-width: 1024px) {
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex; /* Cambiado de grid a flex para ocupar todo el ancho */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Asegura que el contenedor ocupe toda la altura */
     padding: 0 2rem;
   }
+}
+
+/* Estilos de los botones */
+button {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Estilos globales para títulos y listas */
+h1, h2 {
+  color: #333;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 5px 0;
 }
