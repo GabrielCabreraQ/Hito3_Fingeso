@@ -1,15 +1,12 @@
 package com.easywheels.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("arrendatario")
+@DiscriminatorValue("Arrendatario")
 public class Arrendatario extends Usuario{
 
     // Atributos
@@ -23,6 +20,12 @@ public class Arrendatario extends Usuario{
 
 
     public Arrendatario() {
+    }
+
+    public Arrendatario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento, List<String> tipoLicencia, List<String> documentos) {
+        super(nombreUsuario, correoUsuario, contraseniaUsuario, telefonoUsuario, fechaNacimiento);
+        this.tipoLicencia = tipoLicencia;
+        this.documentos = documentos;
     }
 
     public Arrendatario(List<String> tipoLicencia, List<String> documentos) {
