@@ -1,15 +1,22 @@
-import {createRouter,createWebHistory}from'vue-router'
+// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from '../vistas/home.vue';
 
-const routes = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [
-        {
-            path: '/',
-            name: 'Home',
-            component: () => import('../vistas/admin.vue'),
-            alias: '/inicio',
-        }
-    ],
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home, // Usa el archivo home.vue
+      alias: '/inicio',
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: () => import('../vistas/admin.vue'),
+    },
+  ],
 });
 
-export default routes;
+export default router;
