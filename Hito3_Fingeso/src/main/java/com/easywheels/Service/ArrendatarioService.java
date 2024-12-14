@@ -137,6 +137,11 @@ public class ArrendatarioService {
         // Actualizar la disponibilidad del vehículo con la fecha final del arriendo
         actualizarDisponibilidad(vehiculo, fechaInicio, fechaFinal);
 
+        // Cambiar el estado del vehículo a "no devuelto"
+        vehiculo.setDevuelto(false);
+        vehiculoRepository.save(vehiculo);
+
         return arriendo;
     }
+
 }
