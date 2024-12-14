@@ -122,6 +122,4 @@ public class Vehiculo {
     public void setDevuelto(Boolean devuelto) {
         this.devuelto = devuelto;
     }
-
-
 }
