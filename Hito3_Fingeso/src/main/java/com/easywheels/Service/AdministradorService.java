@@ -75,4 +75,10 @@ public class AdministradorService {
         }
         return publicacion.toString(); // Aquí asumo que Publicacion tiene un método toString bien definido
     }
+    // Método para eliminar una publicación
+
+    public boolean eliminarPublicacion(int id, String permiso) {
+        return publicacionService.deletePublicacion(id, permiso);
+    }
+
 }

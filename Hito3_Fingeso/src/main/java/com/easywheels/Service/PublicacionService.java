@@ -68,9 +68,10 @@ public class PublicacionService {
     }
 
     // Delete
-    public void deletePublicacion(int id, String permiso) {
+    public boolean deletePublicacion(int id, String permiso) {
         verificarPermisosAdmin(permiso);
         publicacionRepository.deleteById((long) id);
+        return false;
     }
 
     // Metodo para visualizar un vehículo asociado a una publicación

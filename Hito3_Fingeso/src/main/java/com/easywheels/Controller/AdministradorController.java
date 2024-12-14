@@ -79,6 +79,13 @@ public class AdministradorController {
         return ResponseEntity.ok(info);
     }
 
+    // Controlador para eliminar una publicación
+    @DeleteMapping("/deletePublicacion/{id}")
+    public ResponseEntity<Void> eliminarPublicacion(@PathVariable int id) {
+        String permiso = "administrador";
+        boolean eliminado = administradorService.eliminarPublicacion(id, permiso);
+        return eliminado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 
 
 
