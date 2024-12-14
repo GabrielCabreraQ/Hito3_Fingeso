@@ -5,6 +5,8 @@ import com.easywheels.Model.Publicacion;
 import com.easywheels.Model.Vehiculo;
 
 import com.easywheels.Repository.AdministradorRepository;
+import com.easywheels.Repository.PublicacionRepository;
+import com.easywheels.Repository.VehiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,12 @@ import java.util.Optional;
 public class AdministradorService {
     @Autowired // Inyectar dependencias automáticamente en Spring
     private AdministradorRepository administradorRepository; // Llamada al repo
+
+    @Autowired
+    private PublicacionRepository publicacionRepository;
+
+    @Autowired
+    private VehiculoRepository vehiculoRepository;
 
     @Autowired
     private VehiculoService vehiculoService; // variable para crear un vehiculo
@@ -59,7 +67,31 @@ public class AdministradorService {
     }
 
     //Metodo para crear publicacion
-    public Publicacion crearPublicacion(Publicacion publicacion, String permiso) {
-        return publicacionService.createPublicacion(publicacion, permiso);
+    /**
+     * Método para crear una publicación asociada a un vehículo
+     *
+     * @param idAdministrador ID del administrador que realiza la acción.
+     * @param publicacion     Datos de la publicación a crear (vehículo incluido).
+     * @return Publicación creada.
+     */
+    public Publicacion crearPublicacion(Long idAdministrador, Publicacion publicacion) {
+        // Verificar si el administrador existe
+        administradorRepository.findById(idAdministrador)
+                .orElseThrow(() -> new IllegalArgumentException("Administrador no encontrado."));
+
+        // Verificar si el vehículo asociado a la publicación existe
+        Vehiculo vehiculo = vehiculoRepository.findById(publicacion.getVehiculo().getIdVehiculo())
+                .orElseThrow(() -> new IllegalArgumentException("Vehículo especificado no encontrado."));
+
+        // Validar si ya existe una publicación para el vehículo
+        if (publicacionRepository.existsByVehiculo(vehiculo)) {
+            throw new IllegalStateException("Ya existe una publicación asociada a este vehículo.");
+        }
+
+        // Asociar el vehículo a la publicación
+        publicacion.setVehiculo(vehiculo);
+
+        // Persistir la publicación
+        return publicacionRepository.save(publicacion);
     }
 }

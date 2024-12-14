@@ -63,16 +63,11 @@ public class AdministradorController {
     }
 
     //Controlador para crear una publicacion
-    @PostMapping("/createPublicacion")
-    public ResponseEntity<Publicacion> crearPublicacion(@RequestBody Publicacion publicacion) {
-        String permiso = "administrador";
-
-        //Crear publicacion a través del servicio
-        Publicacion nuevaPublicacion = administradorService.crearPublicacion(publicacion, permiso);
+    @PostMapping("/{id}/createPublicacion")
+    public ResponseEntity<Publicacion> crearPublicacion(@PathVariable Long id, @RequestBody Publicacion publicacion) {
+        // Crear publicación a través del servicio del administrador
+        Publicacion nuevaPublicacion = administradorService.crearPublicacion(id, publicacion);
         return ResponseEntity.ok(nuevaPublicacion);
     }
-
-
-
 
 }
