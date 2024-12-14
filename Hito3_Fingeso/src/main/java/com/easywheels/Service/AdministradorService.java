@@ -70,9 +70,6 @@ public class AdministradorService {
         if (publicacion == null) {
             return "La publicación no existe.";
         }
-        if (!publicacion.getVisibilidad()) {
-            return "La publicación no está disponible.";
-        }
         return publicacion.toString();
     }
     // Método para eliminar una publicación
