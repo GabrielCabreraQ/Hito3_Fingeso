@@ -1,4 +1,10 @@
 package com.easywheels.Repository;
 
-public interface BoletaRepository {
+import com.easywheels.Model.Boleta;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface BoletaRepository extends JpaRepository<Boleta, Long> {
 }
+

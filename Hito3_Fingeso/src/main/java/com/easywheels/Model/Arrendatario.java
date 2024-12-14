@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("Arrendatario")
+@DiscriminatorValue("arrendatario")
 public class Arrendatario extends Usuario{
 
     // Atributos
