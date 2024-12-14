@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.time.ZoneId;
 
 @Service
 public class ArrendatarioService {
+
     public static LocalDate convertToLocalDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
@@ -38,14 +40,15 @@ public class ArrendatarioService {
     private VehiculoRepository vehiculoRepository;
 
     //registrar usuario
-    public Arrendatario register(String nombre, String correo, String contrasenia, String telefono, Date fechaNacimiento, List<String> tipoLicencia, List<String> documentos){
+    public Arrendatario register(String nombre, String correo, String contrasenia, String telefono, Date fechaNacimiento, List<String> tipoLicencia, List<String> documentos) {
         Arrendatario nuevoUsuario = new Arrendatario(nombre, correo, contrasenia, telefono, fechaNacimiento, tipoLicencia, documentos);
         Arrendatario existente = arrendatarioRepository.findByCorreoUsuario(nuevoUsuario.getCorreoUsuario());
-        if(existente != null){
+        if (existente != null) {
             return null;
         }
         return arrendatarioRepository.save(nuevoUsuario);
     }
+
     public boolean verificarDisponibilidad(Vehiculo vehiculo, Date fechaInicio, Date fechaFinal) {
         LocalDate inicio = convertToLocalDate(fechaInicio);
         LocalDate fin = convertToLocalDate(fechaFinal);
@@ -58,25 +61,27 @@ public class ArrendatarioService {
         return true;
     }
 
-
     public void actualizarDisponibilidad(Vehiculo vehiculo, Date fechaInicio, Date fechaFinal) {
         // Convertir las fechas de inicio y final a LocalDate
         LocalDate inicio = fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate fin = fechaFinal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
+        // Eliminar las fechas de disponibilidad dentro del rango del arrendamiento
         List<LocalDate> fechasAEliminar = new ArrayList<>();
         for (LocalDate disponibilidad : vehiculo.getDisponibilidad()) {
-            // Comparar las fechas correctamente
             if (!disponibilidad.isBefore(inicio) && !disponibilidad.isAfter(fin)) {
                 fechasAEliminar.add(disponibilidad);
             }
         }
-
-        // Remover las fechas no disponibles y guardar cambios
+        // Remover las fechas no disponibles
         vehiculo.getDisponibilidad().removeAll(fechasAEliminar);
+
+        // Agregar la nueva fecha de disponibilidad después del arriendo (día siguiente al fin del arriendo)
+        vehiculo.getDisponibilidad().add(fin.plusDays(1));
+
+        // Guardar los cambios en el vehículo
         vehiculoRepository.save(vehiculo);
     }
-
 
     public Arriendo arrendarVehiculo(long idArrendatario, long idPublicacion, Date fechaInicio, Date fechaFinal) {
         Arrendatario arrendatario = arrendatarioRepository.findById(idArrendatario)
@@ -118,41 +123,20 @@ public class ArrendatarioService {
             throw new IllegalStateException("Error al crear el arriendo: probablemente un ID duplicado.", e);
         }
 
-        // Actualizar la disponibilidad del vehículo
+        // Crear la boleta asociada al arriendo y marcarla como pagada
+        Boleta nuevaBoleta = new Boleta();
+        nuevaBoleta.setEstado("Pagado");  // Marcar la boleta como pagada
+        nuevaBoleta.setFechaPago(LocalDateTime.now());  // Establecer la hora exacta de pago
+
+        arriendo.setBoleta(nuevaBoleta);
+
+        // Guardar la boleta y el arriendo con su boleta asociada
+        boletaRepository.save(nuevaBoleta);
+        arriendoRepository.save(arriendo);
+
+        // Actualizar la disponibilidad del vehículo con la fecha final del arriendo
         actualizarDisponibilidad(vehiculo, fechaInicio, fechaFinal);
 
         return arriendo;
     }
-
-
-
-    public void pagarArriendo(long idArrendatario, int idArriendo) {
-        Arrendatario arrendatario = arrendatarioRepository.findById(idArrendatario)
-                .orElseThrow(() -> new IllegalArgumentException("Arrendatario no encontrado."));
-
-        Arriendo arriendo = arriendoRepository.findById(idArriendo)
-                .orElseThrow(() -> new IllegalArgumentException("Arriendo no encontrado."));
-
-        if (arriendo.getCancelado()) {
-            throw new IllegalStateException("El arriendo ya ha sido pagado.");
-        }
-
-        // Simular procesamiento de pago
-        boolean pagoExitoso = true; // Cambiar por lógica real de pago
-        if (!pagoExitoso) {
-            throw new RuntimeException("El pago no se pudo completar.");
-        }
-
-        // Actualizar el estado del arriendo
-        arriendo.setCancelado(true);
-
-        // Crear y asociar la boleta (cambia el nombre de la variable local)
-        Boleta nuevaBoleta = new Boleta(); // Asegúrate de agregar los detalles necesarios
-        arriendo.setBoleta(nuevaBoleta);
-
-        // Guardar la boleta y el arriendo
-        boletaRepository.save(nuevaBoleta); // Guardar la boleta
-        arriendoRepository.save(arriendo);   // Guardar el arriendo actualizado
-    }
-
 }

@@ -66,15 +66,4 @@ public class ArrendatarioController {
         }
     }
 
-    @PostMapping("/{idArrendatario}/arriendos/{idArriendo}/pagar")
-    public ResponseEntity<String> pagarArriendo(
-            @PathVariable long idArrendatario,
-            @PathVariable int idArriendo) {
-        try {
-            arrendatarioService.pagarArriendo(idArrendatario, idArriendo);
-            return ResponseEntity.ok("El arriendo ha sido pagado exitosamente.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el pago del arriendo.");
-        }
-    }
 }

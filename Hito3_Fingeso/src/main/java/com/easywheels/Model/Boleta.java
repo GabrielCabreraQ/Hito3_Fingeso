@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Boleta {
@@ -13,7 +14,7 @@ public class Boleta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // Clave primaria
 
-    private Date fechaPago;
+    private LocalDateTime fechaPago;
     private int montoTotal;
     private String estado;
     private String metodoDePago;
@@ -21,7 +22,7 @@ public class Boleta {
     public Boleta() {
     }
 
-    public Boleta(Date fechaPago, int montoTotal, String estado, String metodoDePago) {
+    public Boleta(LocalDateTime fechaPago, int montoTotal, String estado, String metodoDePago) {
         this.fechaPago = fechaPago;
         this.montoTotal = montoTotal;
         this.estado = estado;
@@ -37,11 +38,11 @@ public class Boleta {
         this.id = id;
     }
 
-    public Date getFechaPago() {
+    public LocalDateTime getFechaPago() {
         return fechaPago;
     }
 
-    public void setFechaPago(Date fechaPago) {
+    public void setFechaPago(LocalDateTime fechaPago) {
         this.fechaPago = fechaPago;
     }
 
