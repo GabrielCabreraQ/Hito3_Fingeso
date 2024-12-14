@@ -1,6 +1,7 @@
 package com.easywheels.Controller;
 
 import com.easywheels.Model.Administrador;
+import com.easywheels.Model.Vehiculo;
 import com.easywheels.Service.AdministradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +47,16 @@ public class AdministradorController {
     public ResponseEntity<Void> eliminarAdministrador(@PathVariable Long id) {
         administradorService.eliminarAdministrador(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Controlador para crear un vehiculo
+    @PostMapping("/createVehiculo")
+    public ResponseEntity<Vehiculo> crearVehiculo(@RequestBody Vehiculo vehiculo) {
+        // Aquí, el permiso podría ser obtenido de la sesión del usuario autenticado o ser parte del objeto Administrador
+        String permiso = "administrador"; // Cambia esto por la lógica de permisos adecuada
+
+        // Crear vehiculo a través del servicio
+        Vehiculo nuevoVehiculo = administradorService.crearVehiculo(vehiculo, permiso);
+        return ResponseEntity.ok(nuevoVehiculo);
     }
 }

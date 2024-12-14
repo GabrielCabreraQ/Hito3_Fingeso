@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VehiculoService {
-    @Autowired
-    private VehiculoRepository vehiculoRepository;
 
+    private final VehiculoRepository vehiculoRepository;
+
+    @Autowired
     public VehiculoService(VehiculoRepository vehiculoRepository) {
         this.vehiculoRepository = vehiculoRepository;
     }
@@ -26,16 +26,20 @@ public class VehiculoService {
     }
 
     // CRUD con validación de permisos
+
     // Create
     public Vehiculo createVehiculo(Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
-        return vehiculoRepository.save(vehiculo); // No necesitas establecer el ID
+        // Asegúrate de que el vehículo no tenga un ID establecido
+        vehiculo.setIdVehiculo(null); // Esto es redundante pero asegura que el ID es nulo
+        return vehiculoRepository.save(vehiculo);
     }
 
     // Read
     public Vehiculo getVehiculoById(Long id, String permiso) {
         verificarPermisosAdmin(permiso);
-        return vehiculoRepository.findById(id).orElse(null);
+        return vehiculoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Vehículo con ID " + id + " no encontrado."));
     }
 
     public List<Vehiculo> getAllVehiculos(String permiso) {
@@ -46,12 +50,9 @@ public class VehiculoService {
     // Update
     public Vehiculo updateVehiculo(Long id, Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
-
-        // Verifica si el vehiculo existe
         if (!vehiculoRepository.existsById(id)) {
             throw new IllegalArgumentException("Vehículo con ID " + id + " no existe.");
         }
-
         vehiculo.setIdVehiculo(id); // Asegúrate de establecer el ID para la actualización
         return vehiculoRepository.save(vehiculo);
     }
@@ -59,16 +60,18 @@ public class VehiculoService {
     // Delete
     public void deleteVehiculo(Long id, String permiso) {
         verificarPermisosAdmin(permiso);
+        if (!vehiculoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Vehículo con ID " + id + " no existe.");
+        }
         vehiculoRepository.deleteById(id);
     }
 
     // Método que devuelve los vehículos disponibles en una fecha específica
     public List<Vehiculo> obtenerVehiculosDisponibles(LocalDate fecha, String permiso) {
-        // Buscar vehículos que tengan la fecha en su lista de disponibilidad
         verificarPermisosAdmin(permiso);
-        List<Vehiculo> vehiculos = vehiculoRepository.findAll();
-        return vehiculos.stream()
-                .filter(vehiculo -> vehiculo.getDisponibilidad().contains(fecha))
-                .collect(Collectors.toList());
+        // Llama al repositorio para encontrar vehículos disponibles
+        return vehiculoRepository.findVehiculosDisponibles(fecha);
     }
+
+
 }
