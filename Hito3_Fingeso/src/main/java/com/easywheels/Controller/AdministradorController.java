@@ -1,7 +1,9 @@
 package com.easywheels.Controller;
 
 import com.easywheels.Model.Administrador;
+import com.easywheels.Model.Publicacion;
 import com.easywheels.Model.Vehiculo;
+
 import com.easywheels.Service.AdministradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,4 +61,18 @@ public class AdministradorController {
         Vehiculo nuevoVehiculo = administradorService.crearVehiculo(vehiculo, permiso);
         return ResponseEntity.ok(nuevoVehiculo);
     }
+
+    //Controlador para crear una publicacion
+    @PostMapping("/createPublicacion")
+    public ResponseEntity<Publicacion> crearPublicacion(@RequestBody Publicacion publicacion) {
+        String permiso = "administrador";
+
+        //Crear publicacion a través del servicio
+        Publicacion nuevaPublicacion = administradorService.crearPublicacion(publicacion, permiso);
+        return ResponseEntity.ok(nuevaPublicacion);
+    }
+
+
+
+
 }

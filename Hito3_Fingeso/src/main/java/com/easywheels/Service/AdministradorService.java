@@ -1,7 +1,9 @@
 package com.easywheels.Service;
 
 import com.easywheels.Model.Administrador;
+import com.easywheels.Model.Publicacion;
 import com.easywheels.Model.Vehiculo;
+
 import com.easywheels.Repository.AdministradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class AdministradorService {
 
     @Autowired
     private VehiculoService vehiculoService; // variable para crear un vehiculo
+
+    @Autowired
+    private PublicacionService publicacionService; // variable para crear un vehiculo
 
     // CRUD
 
@@ -51,5 +56,10 @@ public class AdministradorService {
     //Metodo publicar vehiculo
     public Vehiculo crearVehiculo(Vehiculo vehiculo, String permiso) {
         return vehiculoService.createVehiculo(vehiculo, permiso);
+    }
+
+    //Metodo para crear publicacion
+    public Publicacion crearPublicacion(Publicacion publicacion, String permiso) {
+        return publicacionService.createPublicacion(publicacion, permiso);
     }
 }
