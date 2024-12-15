@@ -104,7 +104,8 @@ public class Publicacion {
                 "- Tipo de cuerpo: " + getVehiculo().getTipoCuerpo() + "\n" +
                 "- Precio: " + getPrecioNormal() + "\n" +
                 "- Combustible/AC: " + getVehiculo().getCombustibleAC() + "\n" +
-                "- Disponibilidad: " + getVehiculo().getDisponibilidad() + "\n\n" +
+                "- Disponibilidad para arriendo: " + getVehiculo().getDevuelto() + "\n" +
+                "- Vehiculo devuelto: " + getVehiculo().getDisponibilidad() + "\n\n" +
 
                 "- precioNormal=" + getPrecioNormal() + "\n" +
                 "- codigoACRISS='" + getCodigoACRISS() + "\n" +
