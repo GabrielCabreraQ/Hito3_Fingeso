@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.time.ZoneId;
+import java.util.stream.Collectors;
 
 @Service
 public class ArrendatarioService {
@@ -50,38 +51,28 @@ public class ArrendatarioService {
     }
 
     public boolean verificarDisponibilidad(Vehiculo vehiculo, Date fechaInicio, Date fechaFinal) {
-        LocalDate inicio = convertToLocalDate(fechaInicio);
-        LocalDate fin = convertToLocalDate(fechaFinal);
-
-        for (LocalDate disponibilidad : vehiculo.getDisponibilidad()) {
-            if (!disponibilidad.isBefore(inicio) && !disponibilidad.isAfter(fin)) {
-                return false; // El vehículo no está disponible
-            }
-        }
-        return true;
-    }
-
-    public void actualizarDisponibilidad(Vehiculo vehiculo, Date fechaInicio, Date fechaFinal) {
-        // Convertir las fechas de inicio y final a LocalDate
+        // Convertir las fechas a LocalDate para facilitar las operaciones
         LocalDate inicio = fechaInicio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate fin = fechaFinal.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        // Eliminar las fechas de disponibilidad dentro del rango del arrendamiento
-        List<LocalDate> fechasAEliminar = new ArrayList<>();
-        for (LocalDate disponibilidad : vehiculo.getDisponibilidad()) {
-            if (!disponibilidad.isBefore(inicio) && !disponibilidad.isAfter(fin)) {
-                fechasAEliminar.add(disponibilidad);
+        // Consultar en la base de datos los arriendos para este vehículo
+        List<Arriendo> arriendos = arriendoRepository.findByVehiculoId(vehiculo.getIdVehiculo());
+
+        // Verificar si hay conflictos de fechas
+        for (Arriendo arriendo : arriendos) {
+            LocalDate inicioArriendo = arriendo.getFechaInicio().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate finArriendo = arriendo.getFechaFin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Si hay cualquier intersección entre el rango solicitado y un arriendo existente, no está disponible
+            if (!(fin.isBefore(inicioArriendo) || inicio.isAfter(finArriendo))) {
+                return false;
             }
         }
-        // Remover las fechas no disponibles
-        vehiculo.getDisponibilidad().removeAll(fechasAEliminar);
 
-        // Agregar la nueva fecha de disponibilidad después del arriendo (día siguiente al fin del arriendo)
-        vehiculo.getDisponibilidad().add(fin.plusDays(1));
-
-        // Guardar los cambios en el vehículo
-        vehiculoRepository.save(vehiculo);
+        // Si no hay conflictos, el vehículo está disponible
+        return true;
     }
+
 
     public Arriendo arrendarVehiculo(long idArrendatario, long idPublicacion, Date fechaInicio, Date fechaFinal) {
         Arrendatario arrendatario = arrendatarioRepository.findById(idArrendatario)
@@ -126,7 +117,8 @@ public class ArrendatarioService {
         // Crear la boleta asociada al arriendo y marcarla como pagada
         Boleta nuevaBoleta = new Boleta();
         nuevaBoleta.setEstado("Pagado");  // Marcar la boleta como pagada
-        nuevaBoleta.setFechaPago(LocalDateTime.now());  // Establecer la hora exacta de pago
+        nuevaBoleta.setFechaPago(LocalDateTime.now().withNano(0));  // Establecer la hora exacta de pago
+        nuevaBoleta.setMontoTotal(precioTotal);
 
         arriendo.setBoleta(nuevaBoleta);
 
@@ -134,8 +126,6 @@ public class ArrendatarioService {
         boletaRepository.save(nuevaBoleta);
         arriendoRepository.save(arriendo);
 
-        // Actualizar la disponibilidad del vehículo con la fecha final del arriendo
-        actualizarDisponibilidad(vehiculo, fechaInicio, fechaFinal);
 
         // Cambiar el estado del vehículo a "no devuelto"
         vehiculo.setDevuelto(false);
@@ -143,5 +133,5 @@ public class ArrendatarioService {
 
         return arriendo;
     }
-
 }
+
