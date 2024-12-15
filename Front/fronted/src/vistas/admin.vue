@@ -26,7 +26,6 @@
 
     <!-- Sección Principal Dinámica -->
     <main class="main-content">
-
       <!-- Gestión de Publicaciones -->
       <div v-if="selectedSection === 'Gestión de Publicaciones'">
         <h2>Gestión de Publicaciones</h2>
@@ -92,35 +91,85 @@
                   <button class="delete-button">🗑️</button>
                 </td>
               </tr>
-              <tr>
-                <td>Publicación 3</td>
-                <td>
-                  <button class="edit-button">✏️</button>
-                </td>
-                <td>
-                  <button class="delete-button">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Publicación 4</td>
-                <td>
-                  <button class="edit-button">✏️</button>
-                </td>
-                <td>
-                  <button class="delete-button">🗑️</button>
-                </td>
-              </tr>
-              <tr>
-                <td>Publicación 5</td>
-                <td>
-                  <button class="edit-button">✏️</button>
-                </td>
-                <td>
-                  <button class="delete-button">🗑️</button>
-                </td>
-              </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Gestión de Vehículos -->
+      <div v-if="selectedSection === 'Gestión de vehiculos'">
+        <h2>Gestión de vehículos</h2>
+
+        <!-- Botón para crear nueva publicación -->
+        <div class="actions">
+          <button class="create-button" @click="showForm = true">Añadir vehiculo</button>
+        </div>
+
+        <!-- Contenedor con desplazamiento -->
+        <div class="content-scrollable">
+          <!-- Si showForm es true, mostrar formulario -->
+          <div v-if="showForm" class="form-container">
+            <form class="publication-form" @submit.prevent="savePublication">
+              <div class="form-group">
+                <label for="marca">Marca</label>
+                <input type="text" id="marca" v-model="newPublication.marca" required />
+              </div>
+              <div class="form-group">
+                <label for="modelo">Modelo</label>
+                <input type="text" id="modelo" v-model="newPublication.modelo" required />
+              </div>
+              <div class="form-group">
+                <label for="anio">Año</label>
+                <input type="number" id="anio" v-model="newPublication.anio" required />
+              </div>
+              <div class="form-group">
+                <label for="transmisionTipe">Tipo de transmisión</label>
+                <input type="text" id="transmisionTipe" v-model="newPublication.transmisionTipe" required />
+              </div>
+              <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <input type="text" id="categoria" v-model="newPublication.categoria" required />
+              </div>
+              <div class="form-group">
+                <label for="BodyType">Tipo de Cuerpo</label>
+                <input type="text" id="BodyType" v-model="newPublication.BodyType" required />
+              </div>
+              <div class="form-group">
+                <label for="combustible">Combustible</label>
+                <input type="text" id="combustible" v-model="newPublication.combustible" required />
+              </div>
+              <div class="form-group">
+                <label for="disponibilidad">Disponible</label>
+                <input type="checkbox" id="disponibilidad" v-model="newPublication.disponibilidad" />
+              </div>
+              <button type="submit" class="submit-button">Guardar Publicación</button>
+              <button type="button" @click="showForm = false" class="cancel-button">Cancelar</button>
+            </form>
+          </div>
+
+          <!-- Si showForm es false, mostrar tabla -->
+          <div v-else>
+            <table class="publication-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Editar</th>
+                  <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(publication, index) in publications" :key="index">
+                  <td>{{ publication.name }}</td>
+                  <td>
+                    <button class="edit-button" @click="editPublication(index)">✏️</button>
+                  </td>
+                  <td>
+                    <button class="delete-button" @click="deletePublication(index)">🗑️</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -148,20 +197,30 @@
                 <button class="descarga-button">⬇️</button>
               </td>
             </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Boletas -->
+      <div v-else-if="selectedSection === 'Boletas'">
+        <h2>Acá se mostrará un listado de boletas para visualizar</h2>
+
+        <table class="publication-table">
+          <thead>
             <tr>
-              <td>Informe 3</td>
+              <th>Nombre</th>
+              <th>Descargar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Boleta 1</td>
               <td>
-                <button class="descarga-button">⬇️</button>
+                <button class="Descargar">⬇️</button>
               </td>
             </tr>
             <tr>
-              <td>Informe 4</td>
-              <td>
-                <button class="descarga-button">⬇️</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Informe 5</td>
+              <td>Boleta 2</td>
               <td>
                 <button class="descarga-button">⬇️</button>
               </td>
@@ -169,21 +228,10 @@
           </tbody>
         </table>
       </div>
-          
-      <!-- Boletas -->
-      <div v-else-if="selectedSection === 'Boletas'">
-        <h2>Acá se mostrará un listado de boletas para visualizar</h2>
-      </div>
 
       <!-- Cerrar Sesion -->
       <div v-else-if="selectedSection === 'Cerrar Sesión'">
         <h2>Sesion cerrada</h2>
-      </div>
-
-      <!-- Vista por Defecto -->
-      <div v-else>
-        <h2>Bienvenido</h2>
-        <p>Seleccione una opción del menú.</p>
       </div>
     </main>
   </div>
@@ -194,31 +242,50 @@ export default {
   name: "Administrador",
   data() {
     return {
-      // Opciones del menú
       menuItems: [
         "Gestión de Publicaciones",
+        "Gestión de vehiculos",
         "Informes",
         "Boletas",
         "Cerrar Sesión",
       ],
-      // Sección seleccionada
       selectedSection: "Gestión de Publicaciones",
-      // Control de formulario
       showForm: false,
       newPublication: {
         name: '',
         price: '',
         status: 'Nuevo',
-        description: ''
-      }
+        description: '',
+        marca: '',
+        modelo: '',
+        anio: '',
+        transmisionTipe: '',
+        categoria: '',
+        BodyType: '',
+        combustible: '',
+        disponibilidad: false
+      },
+      publications: [
+        { name: "Vehículo 1" },
+        { name: "Vehículo 2" }
+      ]
     };
   },
   methods: {
-    // Cambiar la sección principal
     changeSection(section) {
       this.selectedSection = section;
     },
-  },
+    savePublication() {
+      this.publications.push(this.newPublication);
+      this.showForm = false;
+    },
+    editPublication(index) {
+      // Implementa la lógica para editar la publicación
+    },
+    deletePublication(index) {
+      this.publications.splice(index, 1);
+    }
+  }
 };
 </script>
 
@@ -312,6 +379,12 @@ td {
 }
 
 /* Formulario */
+.form-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px; /* Espacio para la barra de desplazamiento */
+}
+
 .publication-form {
   display: flex;
   flex-direction: column;
@@ -387,27 +460,34 @@ textarea {
   font-weight: bold;
 }
 
-.publication-table tr:hover {
-  background-color: #707070;
+.publication-table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
 .edit-button,
 .delete-button {
-  background-color: transparent;
+  background: none;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
 }
 
-.edit-button {
-  color: #2196f3;
+.edit-button:hover {
+  color: #1976d2;
 }
 
-.delete-button {
+.delete-button:hover {
   color: #f44336;
 }
 
-.descarga-button {
-  color: #2196f3;
+/* Diseño responsive */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
 }
 </style>
