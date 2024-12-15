@@ -107,6 +107,7 @@ public class Publicacion {
                 "- Precio: " + getPrecioNormal() + "\n" +
                 "- Combustible/AC: " + getVehiculo().getCombustibleAC() + "\n" +
                 "- Disponibilidad para arriendo: " + getVehiculo().getDevuelto() + "\n" +
+                "- Disponible para uso: " + getVehiculo().getDisponible_uso() + "\n" +
                 "- Vehiculo devuelto: " + getVehiculo().getDisponibilidad() + "\n\n" +
                 "- precioNormal=" + getPrecioNormal() + "\n" +
                 "- codigoACRISS='" + getCodigoACRISS() + "\n" +
