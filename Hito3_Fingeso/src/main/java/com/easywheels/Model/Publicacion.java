@@ -46,6 +46,8 @@ public class Publicacion {
     }
 
     // Metodos
+
+
     public long getIdPublicacion() {
         return idPublicacion;
     }
@@ -96,7 +98,7 @@ public class Publicacion {
 
     @Override
     public String toString() {
-        return "----Publicacion----\n\n" +
+        String result = "----Publicacion----\n\n" +
                 "- Marca del vehiculo: " + getVehiculo().getMarca() + "\n" +
                 "- Año: " + getVehiculo().getAnio() + "\n" +
                 "- Tipo de transmision: " + getVehiculo().getTipoTransmision() + "\n" +
@@ -106,9 +108,19 @@ public class Publicacion {
                 "- Combustible/AC: " + getVehiculo().getCombustibleAC() + "\n" +
                 "- Disponibilidad para arriendo: " + getVehiculo().getDevuelto() + "\n" +
                 "- Vehiculo devuelto: " + getVehiculo().getDisponibilidad() + "\n\n" +
-
                 "- precioNormal=" + getPrecioNormal() + "\n" +
                 "- codigoACRISS='" + getCodigoACRISS() + "\n" +
-                "- visibilidad=" + getVisibilidad();
+                "- visibilidad=" + getVisibilidad() + "\n" +
+                "- Informes:\n";
+        if (getVehiculo().getInformes() != null && !getVehiculo().getInformes().isEmpty()) {
+            for (var informe : getVehiculo().getInformes()) {
+                result += "  - ID: " + informe.getId() +
+                        ", Observaciones: " + informe.getObservaciones() +
+                        ", Fecha: " + informe.getFechaGeneracion() + "\n";
+            }
+        } else {
+            result += "  No hay informes disponibles.\n";
+        }
+        return result;
     }
 }

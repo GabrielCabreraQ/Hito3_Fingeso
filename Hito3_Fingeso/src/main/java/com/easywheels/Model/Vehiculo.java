@@ -55,6 +55,10 @@ public class Vehiculo {
 
     }
 
+    public List<Informe> getInformes() {return informes;}
+
+    public void setInformes(List<Informe> informes) {this.informes = informes;}
+
     public Boolean getDisponible_uso() {return disponible_uso;}
     public void setDisponible_uso(Boolean disponible_uso) {this.disponible_uso = disponible_uso;}
 
