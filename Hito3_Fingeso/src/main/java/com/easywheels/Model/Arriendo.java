@@ -39,6 +39,7 @@ public class Arriendo {
         this.fechaFin = fechaFin;
         this.conformidad = conformidad;
         this.cancelado = cancelado;
+
     }
 
     public Arriendo() {

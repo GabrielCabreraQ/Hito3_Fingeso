@@ -1,5 +1,6 @@
 package com.easywheels.Controller;
 
+import com.easywheels.Model.Informe;
 import com.easywheels.Model.Vehiculo;
 import com.easywheels.Service.VehiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/vehiculos")
@@ -85,4 +85,39 @@ public class VehiculoController {
         List<Vehiculo> vehiculosDisponibles = vehiculoService.obtenerVehiculosDisponibles(fecha, permiso);
         return ResponseEntity.ok(vehiculosDisponibles);
     }
+
+    @PostMapping("/{id}/devolucion")
+    public ResponseEntity<Informe> procesarArriendo(
+            @PathVariable Long id,
+            @RequestParam String observaciones) {
+
+        Informe informe = vehiculoService.procesarArriendo(id, observaciones);
+        return ResponseEntity.ok(informe);
+    }
+
+    @GetMapping("/{id}/informes")
+    public ResponseEntity<String> obtenerInformesPorVehiculo(
+            @PathVariable Long id,
+            @RequestParam String permiso) {
+
+        try {
+            // Verificar permiso
+            if (!permiso.equalsIgnoreCase("administrador")) {
+                throw new IllegalStateException("Acceso denegado: Solo los administradores pueden realizar esta consulta.");
+            }
+
+            // Llamar al servicio para obtener los informes
+            List<Informe> informes = vehiculoService.obtenerInformesPorVehiculo(id);
+            return ResponseEntity.ok(informes.toString());
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build(); // Retorna 404 si no se encuentra el vehículo
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN); // Error de permisos
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); // Otro error
+        }
+    }
+
+
 }

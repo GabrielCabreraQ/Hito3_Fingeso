@@ -1,7 +1,11 @@
 package com.easywheels.Service;
 
+
+import com.easywheels.Model.Informe;
+import com.easywheels.Repository.InformeRepository;
 import com.easywheels.Repository.VehiculoRepository;
 import com.easywheels.Model.Vehiculo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,9 @@ import java.util.List;
 public class VehiculoService {
 
     private final VehiculoRepository vehiculoRepository;
+
+    @Autowired
+    private InformeRepository informeRepository;
 
     @Autowired
     public VehiculoService(VehiculoRepository vehiculoRepository) {
@@ -74,5 +81,41 @@ public class VehiculoService {
         return vehiculoRepository.findVehiculosDisponibles(fecha);
     }
 
+    @Transactional
+    public Informe procesarArriendo(Long idVehiculo, String observaciones) {
+        // Buscar el vehículo
+        Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+
+        // Crear un nuevo informe
+        Informe nuevoInforme = new Informe(vehiculo, observaciones);
+
+        // Agregar el informe al vehículo
+        vehiculo.agregarInforme(nuevoInforme);
+
+        // Actualizar disponible_uso basado en el informe más reciente
+        if (observaciones.equalsIgnoreCase("No tiene fallas")) {
+            vehiculo.setDisponible_uso(true);
+        } else if (observaciones.equalsIgnoreCase("Presenta fallas")) {
+            vehiculo.setDisponible_uso(false);
+        } else {
+            throw new IllegalArgumentException("Observaciones inválidas: " + observaciones);
+        }
+
+        // Guardar cambios en la base de datos
+        vehiculoRepository.save(vehiculo);
+
+        return nuevoInforme;
+    }
+
+    // Obtener todos los informes de un vehículo
+    public List<Informe> obtenerInformesPorVehiculo(Long idVehiculo) {
+        // Verificar si el vehículo existe
+        vehiculoRepository.findById(idVehiculo)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+
+        // Retornar los informes asociados al vehículo
+        return informeRepository.findByVehiculoIdVehiculo(idVehiculo);
+    }
 
 }

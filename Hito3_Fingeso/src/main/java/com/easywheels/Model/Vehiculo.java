@@ -1,9 +1,12 @@
 package com.easywheels.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity     // Indicamos a Spring que es un objeto entidad para la tabla vehiculo
@@ -26,12 +29,19 @@ public class Vehiculo {
 
     private Boolean devuelto;
 
+
+    private Boolean disponible_uso;
+
+    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // Permite la serialización de la lista de informes
+    private List<Informe> informes = new ArrayList<>();
+
     public Vehiculo() {
     }
 
     public Vehiculo(String marca, String modelo, int anio, String tipoTransmision,
                     String categoria, String tipoCuerpo, String combustibleAC, List<LocalDate> disponibilidad,
-                    Boolean devuelto) {
+                    Boolean devuelto, Boolean disponible_uso) {
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
@@ -41,7 +51,12 @@ public class Vehiculo {
         this.combustibleAC = combustibleAC;
         this.disponibilidad = disponibilidad;
         this.devuelto = devuelto;
+        this.disponible_uso = disponible_uso;
+
     }
+
+    public Boolean getDisponible_uso() {return disponible_uso;}
+    public void setDisponible_uso(Boolean disponible_uso) {this.disponible_uso = disponible_uso;}
 
     public Long getIdVehiculo() {
         return idVehiculo;
@@ -123,5 +138,20 @@ public class Vehiculo {
         this.devuelto = devuelto;
     }
 
+
+
+    // Métodos para gestionar informes
+    public void agregarInforme(Informe informe) {
+        this.informes.add(informe);
+        informe.setVehiculo(this);
+        this.devuelto = true; // Marcar como devuelto cada vez que se genera un informe de devolución
+
+    }
+
+    public Informe obtenerUltimoInforme() {
+        return this.informes.stream()
+                .max(Comparator.comparingLong(Informe::getId))
+                .orElse(null); // Retorna null si no hay informes
+    }
 
 }
