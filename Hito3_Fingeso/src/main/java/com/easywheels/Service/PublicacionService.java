@@ -109,9 +109,8 @@ public class PublicacionService {
                 ", Categoría: " + vehiculo.getCategoria() +
                 ", Tipo de Cuerpo: " + vehiculo.getTipoCuerpo() +
                 ", Combustible/AC: " + vehiculo.getCombustibleAC() +
-                ", Disponibilidad: " + (vehiculo.getDisponibilidad() != null ? vehiculo.getDisponibilidad() : "No especificada") +
+                //", Disponibilidad: " + (vehiculo.getDisponibilidad() != null ? vehiculo.getDisponibilidad() : "No especificada") +
                 ", Precio: " + publicacion.getPrecioNormal();
     }
-
 
 }

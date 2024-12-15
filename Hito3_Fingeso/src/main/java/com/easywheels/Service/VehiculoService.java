@@ -38,7 +38,7 @@ public class VehiculoService {
     public Vehiculo createVehiculo(Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
         // Asegúrate de que el vehículo no tenga un ID establecido
-        vehiculo.setIdVehiculo(null); // Esto es redundante pero asegura que el ID es nulo
+        //vehiculo.setIdVehiculo(null); // Esto es redundante pero asegura que el ID es nulo
         return vehiculoRepository.save(vehiculo);
     }
 
