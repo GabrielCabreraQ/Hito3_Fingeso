@@ -21,6 +21,11 @@ const router = createRouter({
       name: 'Login',
       component: () => import('../vistas/login.vue'),
     },
+    {
+      path: '/registerArrendatario',
+      name: 'Registro Arrendatario',
+      component: () => import('../vistas/registerArrendatario.vue'),
+    },
   ],
 });
 

@@ -13,25 +13,33 @@
       <!-- Contenedor de texto principal con fondo verde y algo de transparencia -->
       <div class="content-box">
         <div class="header-content">
-          <h1>Iniciar sesión</h1>
-          <p>Ingresar información de inicio de sesion</p>
+          <h1>Registro de arrendatario</h1>
+          <p>Ingresar información de registro</p>
         </div>
 
         <!-- Contenido principal -->
         <div class="main-content">
           <div class="login-content">
               <div class="inputContainer" >
-                  <input class="mailRect" type="email" v-model="correo" placeholder="Ingrese correo electrónico">
+                  <input class="mailRect"  v-model="nombreUsuario" placeholder="Ingrese nombre">
+                  <br>
+                  <input class="mailRect" type="email" v-model="correoUsuario" placeholder="Ingrese correo electrónico">
+                  <br>
+                  <input class="psRect" type="password" v-model="contraseniaUsuario" placeholder="Ingrese contraseña">
+                  <br>
+                  
+                  <input class="mailRect" v-model="telefonoUsuario" placeholder="Ingrese número telefónico">
+                  <br>
+                  <label>Fecha nacimiento: </label>
+                  <input class="fechaNac" type="email" v-model="correo" placeholder="año">
+                  <input class="fechaNac" type="email" v-model="correo" placeholder="mes">
+                  <input class="fechaNac" type="email" v-model="correo" placeholder="día">
                   <br>
                   <br>
-                  <input class="psRect" type="password" v-model="password" placeholder="Ingrese contraseña">
-                  <br>
-                  <br>
-                  <button class="sesionBtn" v-on:click="login()"> Iniciar Sesion </button>
+                  <button class="sesionBtn" v-on:click="registerUser()"> Registro </button>
               </div>
               <div class="otrosBtns">
-                <div class="otrosBoton" v-on:click="handleChange">Anónimo</div>
-                <div class="otrosBoton" v-on:click="goToRegister">Iniciar sesion</div>
+                  <div class="otrosBoton" v-on:click="handleChange">Anónimo</div>
               </div>
           </div>
         </div>
@@ -63,36 +71,27 @@ export default{
   data(){
     return{
       correo: '',
-      password: '',
+      contraseniaUsuario: '',
     }
   },
   methods:{
     //funcionamiento asincronico
-    async login(){
-      // datos hacia el back
-      const usuario = {
-        'correo': this.correo,
-        "password": this.password,
-      };
-      try {
-        const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "usuarios/loginInt", usuario);
-        if (respuesta.data == 3){   //user gerente
-          return 0;
+    async registerUser(){
+      if (this.contraseniaUsuario != '' & this.correoUsuario !=''){
+        const nuevoUsuario = {
+          "correoUsuario": this.correoUsuario,
+          "contraseniaUsuario": this.contraseniaUsuario,
         }
-        if (respuesta.data == 2){   //user arrendatario
-          return 0;
+        try{
+          const registro = await axios.post(import.meta.env.VITE_BASE_URL + "arrendatario/register",nuevoUsuario);
+          console.log(registro)   // para confirmar que se crea el usuario
+          alert("Usuario arrendatario creado con exito")
+        } catch (error) {
+          alert("No se pudo registrar el arrendatario")
         }
-        if (respuesta.data == 1){   //user admin
-          localStorage.setItem("login",JSON.stringify(this.correo));
-          direccionamientoUsuarioAdmin();
-        } else {                    //user mecanico
-          alert("Credenciales invalidas");
-          return 0;
-        }
-        respuesta.data = 0;
-        console.log(respuesta.data);
-      } catch (error){
-        alert("No se logró una conexión con el servidor");
+      }
+      else{
+        alert("No hay datos ingresados")
       }
     },
 
@@ -107,9 +106,6 @@ export default{
     },
     startSearch() {
       this.$router.push('/buscar'); // Cambia la ruta según la lógica de tu aplicación
-    },
-    goToRegister() {
-      this.$router.push('/register'); // Cambia la ruta según la lógica de tu aplicación
     },
   }
 }
@@ -136,6 +132,12 @@ export default{
 .psRect{
   height: 40px;
   width: 380px;
+}
+
+.fechaNac{
+  height: 25px;
+  width: 80px;
+
 }
 
 .otrosBtns{
