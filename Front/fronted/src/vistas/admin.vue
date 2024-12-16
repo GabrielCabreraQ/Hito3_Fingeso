@@ -116,89 +116,110 @@
       </div>
 
       <!-- Gestión de Vehículos -->
-      <div v-if="selectedSection === 'Gestión de vehiculos'">
-        <h2>Gestión de vehículos</h2>
+      <div v-if="selectedSection === 'Gestión de Vehiculos'">
+        <h2>Gestión de Vehículos</h2>
 
-        <!-- Botón para crear nueva publicación -->
+        <!-- Botón para crear un nuevo vehículo -->
         <div class="actions">
-          <button class="create-button" @click="showForm = true">Añadir vehiculo</button>
+        <button class="create-button" @click="showForm = true">Añadir vehículo</button>
         </div>
 
-        <!-- Contenedor con desplazamiento -->
-        <div class="content-scrollable">
-          <!-- Si showForm es true, mostrar formulario -->
-          <div v-if="showForm" class="form-container">
-            <form class="publication-form" @submit.prevent="addVehiculo">
-              <div class="form-group">
-                <label for="marca">Marca</label>
-                <input type="text" id="marca" v-model="newVehiculo.marca" required />
-              </div>
-              <div class="form-group">
-                <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" v-model="newVehiculo.modelo" required />
-              </div>
-              <div class="form-group">
-                <label for="anio">Año</label>
-                <input type="number" id="anio" v-model="newVehiculo.anio" required />
-              </div>
-              <div class="form-group">
-                <label for="transmisionTipe">Tipo de transmisión</label>
-                <input type="text" id="transmisionTipe" v-model="newVehiculo.tipoDeTransmision" required />
-              </div>
-              <div class="form-group">
-                <label for="categoria">Categoría</label>
-                <input type="text" id="categoria" v-model="newVehiculo.categoria" required />
-              </div>
-              <div class="form-group">
-                <label for="BodyType">Tipo de Cuerpo</label>
-                <input type="text" id="BodyType" v-model="newVehiculo.tipoDeCuerpo" required />
-              </div>
-              <div class="form-group">
-                <label for="combustible">Combustible</label>
-                <input type="text" id="combustible" v-model="newVehiculo.combustibleAC" required />
-              </div>
-              <div class="form-group">
-                <label for="disponibilidad">Disponible para arrendar</label>
-                <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
-              </div>
-              <button type="submit" class="submit-button">Guardar Publicación</button>
-              <button type="button" @click="showForm = false" class="cancel-button">Cancelar</button>
-            </form>
+        <!-- Botón para crear un nuevo vehículo -->
+        <div class="actions">
+        <button class="create-button" @click="showForm3 = true">Gestionar Devolucion</button>
+        </div>
+
+        <!-- Mostrar formulario si showForm es true -->
+        <div v-if="showForm">
+        <div class="scrollable-table-container">
+          <form @submit.prevent="addVehiculo">
+          <div class="form-group">
+            <label for="marca">Marca</label>
+            <input type="text" id="marca" v-model="newVehiculo.marca" required />
           </div>
+          <div class="form-group">
+            <label for="modelo">Modelo</label>
+            <input type="text" id="modelo" v-model="newVehiculo.modelo" required />
+          </div>
+          <div class="form-group">
+            <label for="anio">Año</label>
+            <input type="number" id="anio" v-model="newVehiculo.anio" required />
+          </div>
+          <div class="form-group">
+            <label for="transmisionTipe">Tipo de transmisión</label>
+            <input type="text" id="transmisionTipe" v-model="newVehiculo.tipoDeTransmision" required />
+          </div>
+          <div class="form-group">
+            <label for="categoria">Categoría</label>
+            <input type="text" id="categoria" v-model="newVehiculo.categoria" required />
+          </div>
+          <div class="form-group">
+            <label for="BodyType">Tipo de Cuerpo</label>
+            <input type="text" id="BodyType" v-model="newVehiculo.tipoDeCuerpo" required />
+          </div>
+          <div class="form-group">
+            <label for="combustible">Combustible</label>
+            <input type="text" id="combustible" v-model="newVehiculo.combustibleAC" required />
+          </div>
+          <div class="form-group">
+            <label for="disponibilidad">Disponible para arrendar</label>
+            <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
+          </div>
+          <button type="submit" class="submit-button">Guardar Vehículo</button>
+          <button type="button" @click="showForm = false" class="cancel-button">Cancelar</button>
+        </form>
+        </div>
+        </div>
 
+        <div v-if="showForm3">
+          <form @submit.prevent="gestionarDevolucion">
+            <div class = "form-group">
+              <label for="disponibilidad">ID del Vehiculo</label>
+              <input type="number" id="id_vehiculo" v-model="newVehiculo.id_vehiculo" />
+            </div>
+            <div class="form-group">
+              <label for="disponibilidad">Disponible para arrendar</label>
+              <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
+            </div>
+            <button type="submit" class="submit-button">Guardar Cambios</button>
+            <button type="button" @click="showForm3 = false" class="cancel-button">Cancelar</button>
+          </form>
+        </div>
+        
 
-          <!-- Si showForm es false, mostrar tabla -->
-          <div v-else>
-            <table class="publication-table">
+        <!-- Mostrar tabla de vehículos si showForm es false -->
+        <div v-if =" !showForm && !showForm3">
+          <div class="scrollable-table-container">
+            <table class="vehiculo-table">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Editar</th>
-                  <th>Eliminar</th>
+                  <th>ID</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Año</th>
+                  <th>Transmisión</th>
+                  <th>Categoría</th>
+                  <th>Combustible</th>
+                  <th>Disponible Para Arrendar</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(publication, index) in publications" :key="index">
-                  <td>{{ publication.name }}</td>
-                  <td>
-                    <button class="edit-button" @click="editPublication(index)">✏️</button>
-                  </td>
-                  <td>
-                    <button class="delete-button" @click="deletePublication(index)">🗑️</button>
-                  </td>
+                <tr v-for="(vehiculo, index) in vehiculos" :key="vehiculo.idVehiculo">
+                  <td>{{ vehiculo.idVehiculo }}</td>
+                  <td>{{ vehiculo.marca }}</td>
+                  <td>{{ vehiculo.modelo }}</td>
+                  <td>{{ vehiculo.anio }}</td>
+                  <td>{{ vehiculo.tipoTransmision }}</td>
+                  <td>{{ vehiculo.categoria }}</td>
+                  <td>{{ vehiculo.combustibleAC }}</td>
+                  <td>{{ vehiculo.disponible_uso ? 'Sí' : 'No' }}</td>
                 </tr>
               </tbody>
             </table>
-
-
           </div>
         </div>
       </div>
 
-      <!-- Informes -->
-      <div v-else-if="selectedSection === 'Gestion de Devoluciones'">
-        <h2>Gestion de Devolucion</h2>
-      </div>
 
       <!-- Informes -->
       <div v-else-if="selectedSection === 'Informes'">
@@ -272,9 +293,7 @@ export default {
     return {
       menuItems: [
         "Gestión de Publicaciones",
-        "Gestión de Vehiculos",
-        "Gestion de Devoluciones",
-        
+        "Gestión de Vehiculos", 
         "Informes",
         "Boletas",
         "Cerrar Sesión",
@@ -282,6 +301,7 @@ export default {
       selectedSection: "Gestión de Publicaciones",
       showForm: false,
       newVehiculo: {
+        id_vehiculo: '',
         marca: '',
         modelo: '',
         anio: '',
@@ -304,6 +324,7 @@ export default {
         isEditing: false, // Controla si el formulario de edición está visible
         editedPublication: {}, // Datos de la publicación que estamos editando
         showForm2: false, // Controla si el formulario de edición está visible
+        showForm3: false,
     };
     
   },
@@ -312,6 +333,9 @@ export default {
       this.selectedSection = section;
       if (section === "Gestión de Publicaciones" && !this.showForm) {
         this.fetchPublications();  // Llamamos al método para cargar las publicaciones
+      }
+      if(section === "Gestión de Vehiculos" && !this.showForm){
+        this.fetchVehiculos();
       }
     },
     savePublication() {
@@ -323,8 +347,8 @@ export default {
     cancelEdit() {
       this.isEditing = false;
       this.showForm2 = false;
+      this.showForm3 = false;
     },
-
     computed: {
     currentPublication() {
       return this.isEditing ? this.editedPublication : this.newPublication;
@@ -427,6 +451,16 @@ export default {
           alert("No se pudo obtener la lista de publicaciones. Verifica tu conexión.");
         });
     },
+    async fetchVehiculos() {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BASE_URL + "vehiculos?permiso=administrador");
+      console.log("Vehículos obtenidos:", response.data);
+      this.vehiculos = response.data;
+    } catch (error) {
+      console.error("Error al obtener los vehículos:", error);
+      alert("No se pudo obtener la lista de vehículos. Verifica tu conexión.");
+    }
+  },
     async addVehiculo(){
       const vehiculo = {
         marca: this.newVehiculo.marca,
@@ -447,13 +481,60 @@ export default {
       try{
         const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "administradores/createVehiculo", vehiculo);
         alert("Vehiculo creado correctamente.");
-
+        // Limpiar los campos del formulario
+        this.newVehiculo = {
+            marca: '',
+            modelo: '',
+            anio: null,
+            tipoDeTransmision: '',
+            categoria: '',
+            tipoDeCuerpo: '',
+            combustibleAC: '',
+            disponible_uso: false
+        };
       } catch(error){
         console.error('Error al registrar el vehículo:', error);
         alert('Hubo un problema al registrar el vehículo. Inténtalo nuevamente.');
       }
-    }
+    },
+    async gestionarDevolucion(){
+      if (
+        !this.newVehiculo.id_vehiculo
+      ) {
+        alert('Por favor, ingresa el ID del vehiculo.');
+        return;
+      }
+      if(this.newVehiculo.disponible_uso){
+        try{
+          const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "vehiculos/" + 
+          this.newVehiculo.id_vehiculo +"/devolucion?observaciones=No tiene fallas");
+          alert("Gestion del Vehiculo exitosa.");
+          this.newVehiculo.id_vehiculo = '',
+          this.newVehiculo.disponible_uso = false
+        }catch(error){
+          console.error('Error al gestionar la devolucion del vehiculo:', error);
+          alert('Hubo un problema al gestionar la devolucion del vehículo en disponible. Inténtalo nuevamente.');
+        }
+      }else{
+        try{
+          const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "vehiculos/" + 
+          this.newVehiculo.id_vehiculo +"/devolucion?observaciones=Presenta fallas");
+          alert("Gestion del Vehiculo exitosa.");
+          this.newVehiculo.id_vehiculo = '',
+          this.newVehiculo.disponible_uso = false
+        }catch(error){
+          console.error('Error al gestionar la devolucion del vehiculo:', error);
+          alert('Hubo un problema al gestionar la devolucion del vehículo en disponible. Inténtalo nuevamente.');
+        }
+      }
+      
 
+    },
+
+  },
+  created() {
+  this.fetchPublications();
+  this.fetchVehiculos();
   }
 };
 </script>
@@ -638,6 +719,23 @@ textarea {
 .publication-table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
+.vehiculo-table th,
+.vehiculo-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #000000;
+}
+
+.vehiculo-table th {
+  background-color: #a3a3a3;
+  font-weight: bold;
+}
+
+.vehiculo-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
 
 .edit-button,
 .delete-button {
