@@ -1,315 +1,311 @@
 <template>
   <div class="home-container">
-    <header class="menu-bar">
-      <div class="logo">EasyWheels</div>
-      <nav class="menu">
-        <button @click="goToLogin" class="menu-button">Iniciar Sesión</button>
-        <button @click="goToCatalog" class="menu-button">Catálogo</button>
-        <button @click="goToCustomerService" class="menu-button">Servicio al Cliente</button>
-      </nav>
-    </header>
+    <!-- Barra de menú -->
+    <div class="menu-bar">
+      <div class="logo">Registro de Arrendatarios</div>
+        <button @click="goTologin" class="menu-button">Iniciar sesion</button>
+    </div>
 
-    <main class="content-container">
-      <!-- Contenedor de texto principal con fondo verde y algo de transparencia -->
+    <!-- Contenedor principal -->
+    <div class="content-container">
       <div class="content-box">
         <div class="header-content">
-          <h1>Registro de arrendatario</h1>
-          <p>Ingresar información de registro</p>
+          <h1>Registrar Nuevo Arrendatario</h1>
+          <p>Por favor, complete la información a continuación:</p>
         </div>
-
-        <!-- Contenido principal -->
-        <div class="main-content">
-          <div class="login-content">
-              <div class="inputContainer" >
-                  <input class="mailRect"  v-model="nombreUsuario" placeholder="Ingrese nombre">
-                  <br>
-                  <input class="mailRect" type="email" v-model="correoUsuario" placeholder="Ingrese correo electrónico">
-                  <br>
-                  <input class="psRect" type="password" v-model="contraseniaUsuario" placeholder="Ingrese contraseña">
-                  <br>
-                  
-                  <input class="mailRect" v-model="telefonoUsuario" placeholder="Ingrese número telefónico">
-                  <br>
-                  <label>Fecha nacimiento: </label>
-                  <input class="fechaNac" type="email" v-model="correo" placeholder="año">
-                  <input class="fechaNac" type="email" v-model="correo" placeholder="mes">
-                  <input class="fechaNac" type="email" v-model="correo" placeholder="día">
-                  <br>
-                  <br>
-                  <button class="sesionBtn" v-on:click="registerUser()"> Registro </button>
+        <!-- Formulario desplazable -->
+        <div class="form-scrollable">
+          <form class="form-container" @submit.prevent="crearPublicacion">
+            <div>
+              <label>Nombre:</label>
+              <input
+                type="text"
+                v-model="newPublication.nombreUsuario"
+                class="input-field"
+                placeholder="Ingrese su nombre"
+                required
+              />
+            </div>
+            <div>
+              <label>Correo Electrónico:</label>
+              <input
+                type="email"
+                v-model="newPublication.correoUsuario"
+                class="input-field"
+                placeholder="Ingrese su correo electrónico"
+                required
+              />
+            </div>
+            <div>
+              <label>Contraseña:</label>
+              <input
+                type="password"
+                v-model="newPublication.contraseniaUsuario"
+                class="input-field"
+                placeholder="Ingrese su contraseña"
+                required
+              />
+            </div>
+            <div>
+              <label>Teléfono:</label>
+              <input
+                type="text"
+                v-model="newPublication.telefonoUsuario"
+                class="input-field"
+                placeholder="Ingrese su número telefónico"
+                required
+              />
+            </div>
+            <div>
+              <label>Fecha de Nacimiento:</label>
+              <input
+                type="date"
+                v-model="newPublication.fechaNacimiento"
+                class="input-field"
+                required
+              />
+            </div>
+            <div>
+              <label>Tipo de Licencia:</label>
+              <input
+                type="text"
+                v-model="newPublication.tipoLicenciaInput"
+                class="input-field"
+                placeholder="Ingrese el tipo de licencia (separadas por comas)"
+                @input="convertirLicenciaEnArray"
+              />
+            </div>
+            <div>
+              <label>Documentos:</label>
+              <div class="date-container">
+                <input
+                  type="text"
+                  v-model="nuevoDocumento"
+                  class="input-field"
+                  placeholder="Añadir documento"
+                />
+                <button
+                  type="button"
+                  class="action-button"
+                  @click="agregarDocumento"
+                >
+                  Agregar Documento
+                </button>
               </div>
-              <div class="otrosBtns">
-                  <div class="otrosBoton" v-on:click="handleChange">Anónimo</div>
-              </div>
-          </div>
+            </div>
+            <ul>
+              <li v-for="(doc, index) in newPublication.documentos" :key="index">
+                {{ doc }}
+                <button
+                  type="button"
+                  class="action-button"
+                  @click="eliminarDocumento(index)"
+                >
+                  Eliminar
+                </button>
+              </li>
+            </ul>
+            <button type="submit" class="action-button">Registrar</button>
+          </form>
         </div>
       </div>
-    </main>
-
-    <!-- Aquí se agrega el RouterView para la navegación de rutas -->
-    <RouterView />
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 
-import axios from 'axios';
-//Direcciones
-function direccionamientoUsuarioAdmin(){
-  window.location.href = '/admin';
-}
-function direccionamientoUsuarioArrendatario(){
-  window.location.href = '/arrendatario';
-}
-function direccionamientoUsuarioAnonimo(){
-  window.location.href = '/anonimo';
+function direccionamientologin(){
+  window.location.href = '/login'
 }
 
-
-export default{
-  // Datos prederminados
-  data(){
-    return{
-      correo: '',
-      contraseniaUsuario: '',
-    }
+export default {
+  data() {
+    return {
+      newPublication: {
+        tipo_usuario: "Arrendatario",
+        nombreUsuario: "",
+        correoUsuario: "",
+        contraseniaUsuario: "",
+        telefonoUsuario: "",
+        fechaNacimiento: "",
+        tipoLicencia: [],
+        documentos: [],
+      },
+      nuevoDocumento: "", // Campo temporal para añadir documentos
+      tipoLicenciaInput: "", // Valor del campo de entrada para tipos de licencia
+    };
   },
-  methods:{
-    //funcionamiento asincronico
-    async registerUser(){
-      if (this.contraseniaUsuario != '' & this.correoUsuario !=''){
-        const nuevoUsuario = {
-          "correoUsuario": this.correoUsuario,
-          "contraseniaUsuario": this.contraseniaUsuario,
-        }
-        try{
-          const registro = await axios.post(import.meta.env.VITE_BASE_URL + "arrendatario/register",nuevoUsuario);
-          console.log(registro)   // para confirmar que se crea el usuario
-          alert("Usuario arrendatario creado con exito")
+  methods: {
+    // Convierte la entrada de tipoLicencia a un array de cadenas
+    convertirLicenciaEnArray() {
+      this.newPublication.tipoLicencia = this.tipoLicenciaInput
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== "");
+    },
+
+    async crearPublicacion() {
+      // Validar campos requeridos antes de enviar
+      if (
+        this.newPublication.nombreUsuario &&
+        this.newPublication.correoUsuario &&
+        this.newPublication.contraseniaUsuario &&
+        this.newPublication.telefonoUsuario &&
+        this.newPublication.fechaNacimiento &&
+        this.newPublication.tipoLicencia
+      ) {
+        try {
+          const response = await axios.post(
+            import.meta.env.VITE_BASE_URL + "arrendatarios/register",
+            this.newPublication
+          );
+          
+          // Verificar si la respuesta es null
+          if (response.data === null) {
+            alert("Este correo electrónico ya está registrado.");
+          } else {
+            console.log("Publicación creada con éxito:", response.data);
+            alert("Registro exitoso");
+            this.goTologin();
+          }
         } catch (error) {
-          alert("No se pudo registrar el arrendatario")
+          console.error("Error al crear la publicación:", error);
         }
+      } else {
+        alert("Por favor, complete todos los campos obligatorios");
       }
-      else{
-        alert("No hay datos ingresados")
+    },
+    agregarDocumento() {
+      if (this.nuevoDocumento.trim()) {
+        this.newPublication.documentos.push(this.nuevoDocumento.trim());
+        this.nuevoDocumento = ""; // Limpiar el campo
       }
+    },
+    eliminarDocumento(index) {
+      this.newPublication.documentos.splice(index, 1);
     },
 
-    goToLogin() {
-      this.$router.push('/login'); // Cambia la ruta según la lógica de tu aplicación
+    async goTologin(){
+      direccionamientologin();
     },
-    goToCatalog() {
-      this.$router.push('/catalogo'); // Cambia la ruta según la lógica de tu aplicación
-    },
-    goToCustomerService() {
-      this.$router.push('/servicio-cliente'); // Cambia la ruta según la lógica de tu aplicación
-    },
-    startSearch() {
-      this.$router.push('/buscar'); // Cambia la ruta según la lógica de tu aplicación
-    },
-  }
-}
-
+  },
+};
 </script>
 
 <style scoped>
-.otrosBoton{
-  font-size: 15px;
-  color: black; /* Color inicial del texto */
-  cursor: default; /* El cursor es normal por defecto */
-  transition: color 0.3s ease; /* Añade una transición suave al color */
-}
-.otrosBoton:hover{
-  color: red; /* Cambia el color del texto al pasar el mouse */
-  cursor: pointer; /* Cambia el cursor a mano (puntero) */
-}
-
-.mailRect{
-  height: 40px;
-  width: 380px;
-}
-
-.psRect{
-  height: 40px;
-  width: 380px;
-}
-
-.fechaNac{
-  height: 25px;
-  width: 80px;
-
-}
-
-.otrosBtns{
-  display: flex;
-  width: 400px;
-  width: 100%;
-  max-width: 800px;
-  justify-content: space-between;
-  color: black;
-}
-
-/* Contenedor principal */
-.home-container {
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
-  grid-template-rows: auto 1fr auto; /* Menú, contenido y pie de página */
-  background-image: url('https://media.istockphoto.com/id/959093634/es/vector/vector-abstracto-borrosa-pastel-colores-suave-gradiente-de-fondo.jpg?s=612x612&w=0&k=20&c=atXACiaxrVZFoTAv3S8pEgwyAd8Mn-zgY5UCkzD8eJo='); /* Cambia el URL aquí */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Esto hace que el fondo se quede fijo al hacer scroll */
+/* Ajustes generales */
+body,
+html {
   margin: 0;
-  color: #fff;
-  width: 110%; /* Asegura que el contenedor ocupe todo el ancho */
-  height: 100%; /* Asegura que el contenedor ocupe todo el alto */
-  overflow: hidden; /* Previene el scroll de fondo que pueda generar el contenido */
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-/* Menú superior */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, #4caf50, #2f80ed);
+  color: #fff;
+  overflow-x: hidden;
+}
+
 .menu-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   padding: 15px 20px;
   background-color: rgba(0, 0, 0, 0.8);
-  width: 100%; /* Asegura que el menú ocupe todo el ancho */
-  position: fixed; /* Fija el menú en la parte superior */
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 100; /* Asegura que el menú quede por encima de otros elementos */
+  right: 0;
+  z-index: 100;
 }
 
 .logo {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
-  color: #fff;
 }
 
-.menu {
-  display: flex;
-  gap: 20px;
-}
-
-.menu-button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-
-.menu-button:hover {
-  background-color: #45a049;
-}
-
-/* Contenedor del contenido */
 .content-container {
-  display: grid;
-  grid-template-columns: 1fr; /* Una sola columna para contenido */
-  justify-items: center;
-  padding: 20px;
-  text-align: center;
-  grid-column: 1 / -1; /* Ocupa toda la columna */
-  margin-top: 80px; /* Da espacio para el menú fijo */
-}
-
-/* Contenedor con fondo verde y algo de transparencia */
-.content-box {
-  background-color: rgba(76, 175, 80, 0.7); /* Fondo verde con 70% de opacidad */
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 800px; /* Limita el tamaño */
+  padding: 100px;
+  margin-top: 20px; /* Espacio para el menú fijo */
 }
 
-/* Texto del contenido */
+.content-box {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Formulario desplazable */
+.form-scrollable {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px; /* Espacio para el scroll */
+}
+
 .header-content h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #2f80ed;
 }
 
 .header-content p {
-  font-size: 1.5rem;
-  margin-bottom: 30px;
-}
-
-.main-content {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
-}
-
-.main-content section {
-  margin-bottom: 30px;
-}
-
-.main-content h2 {
-  font-size: 2rem;
-  margin-bottom: 15px;
-}
-
-.main-content ul {
-  list-style: none;
-  padding: 0;
-}
-
-.main-content ul li {
-  margin: 10px 0;
   font-size: 1.2rem;
+  margin-bottom: 20px;
 }
 
-/* Botón Buscar Autos con fondo negro */
-.search-button {
-  padding: 15px 30px;
-  background-color: #000; /* Fondo negro */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-field {
+  padding: 10px;
   font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.search-button:hover {
-  background-color: #444;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .menu-bar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .menu {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .header-content h1 {
-    font-size: 2rem;
-  }
-
-  .header-content p {
-    font-size: 1.2rem;
-  }
-}
-
-/* Asegurando que el fondo ocupe toda la pantalla */
-html, body {
-  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
-#app {
-  height: 100%;
-  width: 100%;
+.date-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-button {
+  background-color: #2f80ed;
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: #1c6dd0;
+  transform: scale(1.05);
 }
 </style>
