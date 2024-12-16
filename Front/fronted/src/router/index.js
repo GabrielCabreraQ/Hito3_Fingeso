@@ -5,6 +5,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/home', // Redirige a /home
+    },
+    {
       path: '/home',
       name: 'Home',
       component: () => import('../vistas/home.vue'), // Usa el archivo home.vue
@@ -29,7 +33,7 @@ const router = createRouter({
       path: '/arriendo',
       name: 'Arriendo',
       component: () => import('../vistas/arriendo.vue'),
-    }
+    },
   ],
 });
 
