@@ -32,9 +32,7 @@ public class VehiculoService {
         }
     }
 
-    // CRUD con validación de permisos
-
-    // Create
+    //Crear vehiculo
     public Vehiculo createVehiculo(Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
         // Asegúrate de que el vehículo no tenga un ID establecido
@@ -49,12 +47,13 @@ public class VehiculoService {
                 .orElseThrow(() -> new IllegalArgumentException("Vehículo con ID " + id + " no encontrado."));
     }
 
+    //Obtener todos los vehiculos, solo puede hacerlo el admin.
     public List<Vehiculo> getAllVehiculos(String permiso) {
         verificarPermisosAdmin(permiso);
         return vehiculoRepository.findAll();
     }
 
-    // Update
+    //Actualizar información de un vehiculo
     public Vehiculo updateVehiculo(Long id, Vehiculo vehiculo, String permiso) {
         verificarPermisosAdmin(permiso);
         if (vehiculoRepository.existsById(id)) {
@@ -65,7 +64,7 @@ public class VehiculoService {
     }
 
 
-    // Delete
+    //Eliminar un vehiculo de la base de datos
     public void deleteVehiculo(Long id, String permiso) {
         verificarPermisosAdmin(permiso);
         if (!vehiculoRepository.existsById(id)) {
@@ -74,26 +73,27 @@ public class VehiculoService {
         vehiculoRepository.deleteById(id);
     }
 
-    // Método que devuelve los vehículos disponibles en una fecha específica
+    //Método que devuelve los vehículos disponibles en una fecha específica
     public List<Vehiculo> obtenerVehiculosDisponibles(LocalDate fecha, String permiso) {
         verificarPermisosAdmin(permiso);
         // Llama al repositorio para encontrar vehículos disponibles
         return vehiculoRepository.findVehiculosDisponibles(fecha);
     }
 
+    //Informar si existen fallas asociadas al vehiculo
     @Transactional
     public Informe procesarArriendo(Long idVehiculo, String observaciones) {
-        // Buscar el vehículo
+        //Buscar el vehículo
         Vehiculo vehiculo = vehiculoRepository.findById(idVehiculo)
                 .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
 
-        // Crear un nuevo informe
+        //Crear un nuevo informe
         Informe nuevoInforme = new Informe(vehiculo, observaciones);
 
-        // Agregar el informe al vehículo
+        //Agregar el informe al vehículo
         vehiculo.agregarInforme(nuevoInforme);
 
-        // Actualizar disponible_uso basado en el informe más reciente
+        //Actualizar disponible_uso basado en el informe más reciente
         if (observaciones.equalsIgnoreCase("No tiene fallas")) {
             vehiculo.setDisponible_uso(true);
         } else if (observaciones.equalsIgnoreCase("Presenta fallas")) {
@@ -102,13 +102,13 @@ public class VehiculoService {
             throw new IllegalArgumentException("Observaciones inválidas: " + observaciones);
         }
 
-        // Guardar cambios en la base de datos
+        //Guardar cambios en la base de datos
         vehiculoRepository.save(vehiculo);
 
         return nuevoInforme;
     }
 
-    // Obtener todos los informes de un vehículo
+    //Obtener todos los informes de un vehículo
     public List<Informe> obtenerInformesPorVehiculo(Long idVehiculo) {
         // Verificar si el vehículo existe
         vehiculoRepository.findById(idVehiculo)

@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 
 public class Publicacion {
 
-    // Atributos
+    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPublicacion;
@@ -33,7 +33,7 @@ public class Publicacion {
         return catalogo != null ? catalogo.getIdCatalogo() : null;
     }
 
-    // Constructores
+    //Constructores
     public Publicacion() {
     }
 
@@ -45,8 +45,7 @@ public class Publicacion {
         this.catalogo = catalogo;
     }
 
-    // Metodos
-
+    //Metodos
 
     public long getIdPublicacion() {
         return idPublicacion;

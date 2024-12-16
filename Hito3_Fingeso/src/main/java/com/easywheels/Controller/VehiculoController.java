@@ -19,12 +19,12 @@ public class VehiculoController {
     @Autowired
     private VehiculoService vehiculoService;
 
-    // Crear un nuevo vehículo
+    //Crear un nuevo vehículo
     @PostMapping
     public ResponseEntity<Vehiculo> createVehiculo(@RequestBody Vehiculo vehiculo,
                                                    @RequestParam String permiso) {
         try {
-            // Llama al servicio para crear el vehículo
+            //Llama al servicio para crear el vehículo
             Vehiculo nuevoVehiculo = vehiculoService.createVehiculo(vehiculo, permiso);
             return new ResponseEntity<>(nuevoVehiculo, HttpStatus.CREATED);
         } catch (IllegalStateException e) {
@@ -34,25 +34,25 @@ public class VehiculoController {
         }
     }
 
-    // Obtener un vehículo por ID
+    //Obtener un vehículo por ID
     @GetMapping("/{id}")
     public ResponseEntity<Vehiculo> getVehiculoById(@PathVariable Long id, @RequestParam String permiso) {
         Vehiculo vehiculo = vehiculoService.getVehiculoById(id, permiso);
         if (vehiculo != null) {
             return ResponseEntity.ok(vehiculo);
         } else {
-            return ResponseEntity.notFound().build(); // Retorna 404 si no se encuentra el vehículo
+            return ResponseEntity.notFound().build(); //Retorna 404 si no se encuentra el vehículo
         }
     }
 
-    // Obtener todos los vehículos
+    //Obtener todos los vehículos
     @GetMapping
     public ResponseEntity<List<Vehiculo>> getAllVehiculos(@RequestParam String permiso) {
         List<Vehiculo> vehiculos = vehiculoService.getAllVehiculos(permiso);
         return ResponseEntity.ok(vehiculos);
     }
 
-    // Actualizar un vehículo
+    //Actualizar un vehículo
     @PutMapping("/{id}")
     public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable Long id,
                                                    @RequestBody Vehiculo vehiculo,
@@ -73,14 +73,14 @@ public class VehiculoController {
         }
     }
 
-    // Eliminar un vehículo
+    //Eliminar un vehículo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVehiculo(@PathVariable Long id, @RequestParam String permiso) {
         vehiculoService.deleteVehiculo(id, permiso);
         return ResponseEntity.noContent().build(); // Retorna 204 sin contenido
     }
 
-    // Obtener vehículos disponibles en una fecha específica
+    //Obtener vehículos disponibles en una fecha específica
     @GetMapping("/disponibles")
     public ResponseEntity<List<Vehiculo>> obtenerVehiculosDisponibles(@RequestParam LocalDate fecha, @RequestParam String permiso) {
         List<Vehiculo> vehiculosDisponibles = vehiculoService.obtenerVehiculosDisponibles(fecha, permiso);
@@ -102,12 +102,12 @@ public class VehiculoController {
             @RequestParam String permiso) {
 
         try {
-            // Verificar permiso
+            //Verificar permiso
             if (!permiso.equalsIgnoreCase("administrador")) {
                 throw new IllegalStateException("Acceso denegado: Solo los administradores pueden realizar esta consulta.");
             }
 
-            // Llamar al servicio para obtener los informes
+            //Llamar al servicio para obtener los informes
             List<Informe> informes = vehiculoService.obtenerInformesPorVehiculo(id);
             return ResponseEntity.ok(informes.toString());
 

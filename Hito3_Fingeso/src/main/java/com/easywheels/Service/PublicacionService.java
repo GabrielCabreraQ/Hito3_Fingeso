@@ -27,8 +27,7 @@ public class PublicacionService {
         }
     }
 
-    // CRUD con validación de permisos
-    // Create
+    //Crear publicación
     public Publicacion createPublicacion(Publicacion publicacion, String permiso) {
         // Validar y obtener el vehículo
         Vehiculo vehiculo = VehiculoService.getVehiculoById(publicacion.getVehiculo().getIdVehiculo(), permiso);
@@ -36,64 +35,62 @@ public class PublicacionService {
         // Asociar entidades
         publicacion.setVehiculo(vehiculo);
 
-        // Guardar la publicación
+        //Guardar la publicación
         return publicacionRepository.save(publicacion);
     }
 
 
-    // Read
+    //Obtener por id una publicación
     public Publicacion getPublicacionById(int id) {
         return publicacionRepository.findById((long) id).orElse(null);
     }
-
 
     public List<Publicacion> getAllPublicaciones() {
         return publicacionRepository.findAll();
     }
 
-    // Update
-    // Update
+    //Actualizar datos de una publicación
     public Publicacion updatePublicacion(Publicacion publicacion, String permiso) {
-        // Verificar permisos de administrador antes de actualizar
+        //Verificar permisos de administrador antes de actualizar
         verificarPermisosAdmin(permiso);
 
-        // Verificar si la publicación existe
+        //Verificar si la publicación existe
         if (!publicacionRepository.existsById(publicacion.getIdPublicacion())) {
             throw new IllegalArgumentException("La publicación con ID " + publicacion.getIdPublicacion() + " no existe.");
         }
 
-        // Obtener la publicación existente desde la base de datos
+        //Obtener la publicación existente desde la base de datos
         Publicacion existingPublicacion = publicacionRepository.findById(publicacion.getIdPublicacion()).orElseThrow(() ->
                 new IllegalArgumentException("La publicación no existe.")
         );
 
-        // Mantener el ID del catálogo existente si no se proporciona uno nuevo
+        //Mantener el ID del catálogo existente si no se proporciona uno nuevo
         if (existingPublicacion.getCatalogo() != null && publicacion.getCatalogo() == null) {
             publicacion.setCatalogo(existingPublicacion.getCatalogo());
         }
 
-        // Actualizar otros campos
+        //Actualizar otros campos
         existingPublicacion.setPrecioNormal(publicacion.getPrecioNormal());
         existingPublicacion.setCodigoACRISS(publicacion.getCodigoACRISS());
         existingPublicacion.setVisibilidad(publicacion.getVisibilidad());
         existingPublicacion.setVehiculo(publicacion.getVehiculo());
 
-        // No se modifica el ID del catálogo si ya tiene uno y no viene en el JSON
+        //No se modifica el ID del catálogo si ya tiene uno y no viene en el JSON
         existingPublicacion.setCatalogo(publicacion.getCatalogo());
 
-        // Guardar y retornar la publicación actualizada
+        //Guardar y retornar la publicación actualizada
         return publicacionRepository.save(existingPublicacion);
     }
 
 
-    // Delete
+    //Eliminar una publicación de la base de datos
     public boolean deletePublicacion(int id, String permiso) {
         verificarPermisosAdmin(permiso);
         publicacionRepository.deleteById((long) id);
         return false;
     }
 
-    // Metodo para visualizar un vehículo asociado a una publicación
+    //Metodo para visualizar un vehículo asociado a una publicación
     public String visualizarVehiculo(Publicacion publicacion) {
         if (publicacion == null || publicacion.getVehiculo() == null) {
             return "No hay información del vehículo para esta publicación.";

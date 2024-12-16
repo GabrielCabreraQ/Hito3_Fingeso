@@ -18,7 +18,7 @@ public class ArrendatarioController {
     @Autowired
     private ArrendatarioService arrendatarioService;
 
-    // Registrar usuario
+    //Registrar usuario
     @PostMapping("/register")
     public ResponseEntity<Arrendatario> register(@RequestBody Arrendatario nuevo) {
         try {
@@ -34,35 +34,35 @@ public class ArrendatarioController {
         }
     }
 
-    // Arrendar un vehículo
+    //Arrendar un vehículo
     @PostMapping("/{idArrendatario}/arrendar")
     public ResponseEntity<Arriendo> arrendarVehiculo(
             @PathVariable long idArrendatario,
             @RequestBody Map<String, Object> body) {  // Recibe el JSON como Map
 
         try {
-            // Parsear las fechas de inicio y fin (asumiendo que vienen como cadenas en el cuerpo de la solicitud)
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  // Cambiar el formato si es necesario
+            //Parsear las fechas de inicio y fin (asumiendo que vienen como cadenas en el cuerpo de la solicitud)
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  //Cambiar el formato si es necesario
             Date fechaInicio = dateFormat.parse((String) body.get("fechaInicio"));
             Date fechaFinal = dateFormat.parse((String) body.get("fechaFinal"));
 
-            // Verificar que las fechas sean válidas
+            //Verificar que las fechas sean válidas
             if (fechaInicio == null || fechaFinal == null) {
-                return ResponseEntity.badRequest().body(null);  // O cualquier mensaje adecuado
+                return ResponseEntity.badRequest().body(null);
             }
 
-            // Obtener el idPublicacion del body
+            //Obtener el idPublicacion del body
             long idPublicacion = ((Number) body.get("idPublicacion")).longValue();
 
-            // Llamar al servicio para arrendar el vehículo
+            //Llamar al servicio para arrendar el vehículo
             Arriendo arriendo = arrendatarioService.arrendarVehiculo(idArrendatario, idPublicacion, fechaInicio, fechaFinal);
             return ResponseEntity.ok(arriendo);
 
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);  // Error de permisos o estado no válido
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);  //Error de permisos o estado no válido
         } catch (Exception e) {
-            // Manejar excepciones de formato o problemas con las fechas
-            return ResponseEntity.badRequest().body(null);  // O cualquier mensaje de error adecuado
+            //Manejar excepciones de formato o problemas con las fechas
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

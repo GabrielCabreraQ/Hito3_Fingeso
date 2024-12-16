@@ -15,7 +15,7 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
 
-    // Obtener todos los usuarios, El gerente tiene la potestad de obtener todos los usuarios                   -- Creo que esta se debe mover a generenteService
+    //Obtener todos los usuarios, El gerente tiene la potestad de obtener todos los usuarios                   -- Creo que esta se debe mover a generenteService
     public List<Usuario> obtenerTodosLosUsuarios() {
         return usuarioRepository.findAll();
     }
@@ -32,7 +32,7 @@ public class UsuarioService {
         throw new RuntimeException("Credenciales incorrectas");
     }
 
-    // Obtener 1 si usuario existe en la base de datos, y 0 si no existe
+    //Obtener 1 si usuario existe en la base de datos, y 0 si no existe
     public int login(String correo, String password) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreoUsuario(correo);
         if (usuarioOpt.isPresent()) {

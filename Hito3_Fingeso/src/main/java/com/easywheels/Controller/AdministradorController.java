@@ -52,7 +52,7 @@ public class AdministradorController {
         return ResponseEntity.noContent().build();
     }
 
-    // Controlador para crear un vehiculo
+    //Controlador para crear un vehiculo
     @PostMapping("/createVehiculo")
     public ResponseEntity<Vehiculo> crearVehiculo(@RequestBody Vehiculo vehiculo) {
         // Aquí, el permiso podría ser obtenido de la sesión del usuario autenticado o ser parte del objeto Administrador

@@ -13,41 +13,41 @@ import java.util.Optional;
 
 @Service
 public class AdministradorService {
-    @Autowired // Inyectar dependencias automáticamente en Spring
-    private AdministradorRepository administradorRepository; // Llamada al repo
+    @Autowired //Inyectar dependencias automáticamente en Spring
+    private AdministradorRepository administradorRepository; //Llamada al repo
 
     @Autowired
-    private VehiculoService vehiculoService; // variable para crear un vehiculo
+    private VehiculoService vehiculoService; //variable para crear un vehiculo
 
     @Autowired
-    private PublicacionService publicacionService; // variable para crear un vehiculo
+    private PublicacionService publicacionService; //variable para crear un vehiculo
 
-    // CRUD
 
-    // CREATE
+    //Crea un administador
     public Administrador crearAdministrador(Administrador administrador) {
         return administradorRepository.save(administrador);
     }
 
-    //GET
-    public List<Administrador> obtenerAdministradores() { // Cambiado a Administrador
+    //Obtener administradores
+    public List<Administrador> obtenerAdministradores() { //Cambiado a Administrador
         return administradorRepository.findAll();
     }
 
-    public Optional<Administrador> obtenerAdministradorPorId(Long id) { // Cambiado a Administrador
+    //Obtiene un administrador por ID
+    public Optional<Administrador> obtenerAdministradorPorId(Long id) { //Cambiado a Administrador
         return administradorRepository.findById(id);
     }
 
-    //PUT
+    //Actualizar info de administrador
     public Administrador actualizarAdministrador(Long id, Administrador administrador) {
         if (administradorRepository.existsById(id)) {
             administrador.setIdUsuario(id);
             return administradorRepository.save(administrador);
         }
-        return null; // o lanzar una excepción
+        return null; //o lanzar una excepción
     }
 
-    // Eliminar un Administrador
+    //Eliminar un Administrador
     public void eliminarAdministrador(Long id) {
         administradorRepository.deleteById(id);
     }
@@ -63,8 +63,7 @@ public class AdministradorService {
         return publicacionService.createPublicacion(publicacion, permiso);
     }
 
-
-    // Metodo para visualizar una publicacion
+    //Metodo para visualizar una publicacion
     public String visualizarPublicacion(int id) {
         Publicacion publicacion = publicacionService.getPublicacionById(id); // Asumimos que el ID es int en PublicacionService
         if (publicacion == null) {
@@ -72,8 +71,8 @@ public class AdministradorService {
         }
         return publicacion.toString();
     }
-    // Método para eliminar una publicación
 
+    //Método para eliminar una publicación
     public boolean eliminarPublicacion(int id, String permiso) {
         return publicacionService.deletePublicacion(id, permiso);
     }

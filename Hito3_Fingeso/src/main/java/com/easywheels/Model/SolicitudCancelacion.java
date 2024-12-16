@@ -2,7 +2,7 @@ package com.easywheels.Model;
 
 public class SolicitudCancelacion {
 
-    // Atributos
+    //Atributos
     private Arrendatario arrendatario;
     private Arriendo arriendo;
     private String motivo;

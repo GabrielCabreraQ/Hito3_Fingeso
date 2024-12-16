@@ -29,7 +29,7 @@ public class Boleta {
         this.metodoDePago = metodoDePago;
     }
 
-    // Getters y Setters
+    //Getters y Setters
     public int getId() {
         return id;
     }

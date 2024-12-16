@@ -14,17 +14,17 @@ public class Informe {
 
     @ManyToOne
     @JoinColumn(name = "vehiculo_id", nullable = false)
-    @JsonBackReference // Evita ciclos infinitos
+    @JsonBackReference //Evita ciclos infinitos
     private Vehiculo vehiculo;
 
     private String observaciones;
     private LocalDate fechaGeneracion;
 
-    // Constructor vacío requerido por JPA
+    //Constructor vacío requerido por JPA
     public Informe() {
     }
 
-    // Constructor completo
+    //Constructor completo
     public Informe(Vehiculo vehiculo, String observaciones) {
         this.vehiculo = vehiculo;
         this.observaciones = observaciones;
@@ -32,7 +32,7 @@ public class Informe {
     }
 
 
-    // Getters y Setters
+    //Getters y Setters
     public Long getId() {
         return id;
     }

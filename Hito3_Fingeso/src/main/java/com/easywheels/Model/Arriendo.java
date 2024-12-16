@@ -7,13 +7,13 @@ import java.util.Date;
 @Entity
 public class Arriendo {
 
-    // Atributos
+    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false) // se relaciona con el atri clienteID y no puede ser null
+    @JoinColumn(name = "cliente_id", nullable = false) //se relaciona con el atributo clienteID y no puede ser null
     private Arrendatario arrendatario;
 
     @ManyToOne
@@ -28,7 +28,7 @@ public class Arriendo {
     @Transient
     private Boleta boleta = new Boleta();
 
-    // Constructor sin Boleta
+    //Constructor sin Boleta
     public Arriendo(Vehiculo vehiculo, Arrendatario arrendatario,
                     int precio, Date fechaInicio, Date fechaFin,
                     Boolean conformidad, Boolean cancelado) {

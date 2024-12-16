@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 public class Catalogo {
 
-    // Atributos
+    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idCatalogo;
@@ -17,8 +17,6 @@ public class Catalogo {
     @JsonManagedReference       // Mandamos en el json, toda la info de las publicaciones del catalogo
     private List<Publicacion> disponibles;
     private String departamento;
-
-
 
     public Catalogo(long idCatalogo, List<Publicacion> disponibles, String departamento) {
         this.idCatalogo = idCatalogo;

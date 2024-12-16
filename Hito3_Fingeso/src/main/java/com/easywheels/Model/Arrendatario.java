@@ -9,7 +9,7 @@ import java.util.List;
 @DiscriminatorValue("arrendatario")
 public class Arrendatario extends Usuario{
 
-    // Atributos
+    //Atributos
     @ElementCollection
     private List<String> tipoLicencia;
     @ElementCollection

@@ -16,7 +16,7 @@ import java.util.List;
 )
 public abstract class Usuario {
 
-    // Atributos
+    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idUsuario;
@@ -32,7 +32,7 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    // Constructor sin el ID
+    //Constructor sin el ID
     public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento, List<Notificacion> notificaciones) {
         this.nombreUsuario = nombreUsuario;
         this.correoUsuario = correoUsuario;
@@ -42,7 +42,7 @@ public abstract class Usuario {
         this.notificaciones = notificaciones;
     }
 
-    //constructor para el registro
+    //Constructor para el registro
     public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento) {
         this.nombreUsuario = nombreUsuario;
         this.correoUsuario = correoUsuario;
@@ -51,6 +51,7 @@ public abstract class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    //Getters y setters
     public long getIdUsuario() {
         return idUsuario;
     }

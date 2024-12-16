@@ -29,7 +29,6 @@ public class Vehiculo {
 
     private Boolean devuelto;
 
-
     private Boolean disponible_uso;
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -55,6 +54,7 @@ public class Vehiculo {
 
     }
 
+    //Getters y setters
     public List<Informe> getInformes() {return informes;}
 
     public void setInformes(List<Informe> informes) {this.informes = informes;}
@@ -142,9 +142,7 @@ public class Vehiculo {
         this.devuelto = devuelto;
     }
 
-
-
-    // Métodos para gestionar informes
+    //Métodos para gestionar informes
     public void agregarInforme(Informe informe) {
         this.informes.add(informe);
         informe.setVehiculo(this);

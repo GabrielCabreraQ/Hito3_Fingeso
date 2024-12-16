@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Gerente extends Usuario {
 
-    // Atributos
+    //Atributos
     private String departamento;
 
 }

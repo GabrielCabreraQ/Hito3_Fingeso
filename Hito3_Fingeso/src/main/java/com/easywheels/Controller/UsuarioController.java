@@ -16,7 +16,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-
     @PostMapping("/getUserBy")
     public ResponseEntity<Usuario> obtenerUsuarioByCorreoContrasenia(@RequestParam String correo, @RequestParam String password) {
         try {
@@ -27,16 +26,6 @@ public class UsuarioController {
         }
     }
 
-    // Retorna 1 si encuentra al usuario en la base de datos, y 0 si no lo hace
-    /*@PostMapping("/login")
-    public ResponseEntity<Integer> login(@RequestParam String correo, @RequestParam String password) {
-        try {
-            Integer existeUsuario = usuarioService.login(correo, password);
-            return ResponseEntity.ok(existeUsuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(401).body(null);
-        }
-    }*/
     // Retorna el objeto Usuario si el usuario esta registrado en la bae de datos. Se indica el tipo de usuario.
     @PostMapping("/login")
     public ResponseEntity<Usuario> loginByUsuario(@RequestParam String correo, @RequestParam String password) {
