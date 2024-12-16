@@ -279,7 +279,9 @@
 
       <!-- Cerrar Sesion -->
       <div v-else-if="selectedSection === 'Cerrar Sesión'">
-        <h2>Sesion cerrada</h2>
+        <div class="actions">
+          <button @click="cerrarSesion" class="menu-button">Cerrar Sesión</button>
+        </div>
       </div>
     </main>
   </div>
@@ -287,6 +289,11 @@
 
 <script>
 import axios from "axios";
+
+function direccionamientoMain(){
+  window.location.href = '/home'
+}
+
 export default {
   name: "Administrador",
   data() {
@@ -337,6 +344,11 @@ export default {
       if(section === "Gestión de Vehiculos" && !this.showForm){
         this.fetchVehiculos();
       }
+    },
+    async cerrarSesion(){
+      // Limpiar la sesión (si es necesario)
+      localStorage.removeItem('login');
+      direccionamientoMain();
     },
     savePublication() {
       this.publications.push(this.newPublication);
