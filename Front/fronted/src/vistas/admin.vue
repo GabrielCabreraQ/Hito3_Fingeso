@@ -128,43 +128,44 @@
         <div class="content-scrollable">
           <!-- Si showForm es true, mostrar formulario -->
           <div v-if="showForm" class="form-container">
-            <form class="publication-form" @submit.prevent="savePublication">
+            <form class="publication-form" @submit.prevent="addVehiculo">
               <div class="form-group">
                 <label for="marca">Marca</label>
-                <input type="text" id="marca" v-model="newPublication.marca" required />
+                <input type="text" id="marca" v-model="newVehiculo.marca" required />
               </div>
               <div class="form-group">
                 <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" v-model="newPublication.modelo" required />
+                <input type="text" id="modelo" v-model="newVehiculo.modelo" required />
               </div>
               <div class="form-group">
                 <label for="anio">Año</label>
-                <input type="number" id="anio" v-model="newPublication.anio" required />
+                <input type="number" id="anio" v-model="newVehiculo.anio" required />
               </div>
               <div class="form-group">
                 <label for="transmisionTipe">Tipo de transmisión</label>
-                <input type="text" id="transmisionTipe" v-model="newPublication.transmisionTipe" required />
+                <input type="text" id="transmisionTipe" v-model="newVehiculo.tipoDeTransmision" required />
               </div>
               <div class="form-group">
                 <label for="categoria">Categoría</label>
-                <input type="text" id="categoria" v-model="newPublication.categoria" required />
+                <input type="text" id="categoria" v-model="newVehiculo.categoria" required />
               </div>
               <div class="form-group">
                 <label for="BodyType">Tipo de Cuerpo</label>
-                <input type="text" id="BodyType" v-model="newPublication.BodyType" required />
+                <input type="text" id="BodyType" v-model="newVehiculo.tipoDeCuerpo" required />
               </div>
               <div class="form-group">
                 <label for="combustible">Combustible</label>
-                <input type="text" id="combustible" v-model="newPublication.combustible" required />
+                <input type="text" id="combustible" v-model="newVehiculo.combustibleAC" required />
               </div>
               <div class="form-group">
-                <label for="disponibilidad">Disponible</label>
-                <input type="checkbox" id="disponibilidad" v-model="newPublication.disponibilidad" />
+                <label for="disponibilidad">Disponible para arrendar</label>
+                <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
               </div>
               <button type="submit" class="submit-button">Guardar Publicación</button>
               <button type="button" @click="showForm = false" class="cancel-button">Cancelar</button>
             </form>
           </div>
+
 
           <!-- Si showForm es false, mostrar tabla -->
           <div v-else>
@@ -188,8 +189,15 @@
                 </tr>
               </tbody>
             </table>
+
+
           </div>
         </div>
+      </div>
+
+      <!-- Informes -->
+      <div v-else-if="selectedSection === 'Gestion de Devoluciones'">
+        <h2>Gestion de Devolucion</h2>
       </div>
 
       <!-- Informes -->
@@ -264,28 +272,25 @@ export default {
     return {
       menuItems: [
         "Gestión de Publicaciones",
-        "Gestión de vehiculos",
+        "Gestión de Vehiculos",
+        "Gestion de Devoluciones",
+        
         "Informes",
         "Boletas",
         "Cerrar Sesión",
       ],
       selectedSection: "Gestión de Publicaciones",
       showForm: false,
-      newvehiculo: {
-        name: '',
-        price: '',
-        status: 'Nuevo',
-        description: '',
+      newVehiculo: {
         marca: '',
         modelo: '',
         anio: '',
-        transmisionTipe: '',
+        tipoDeTransmision: '',
         categoria: '',
-        BodyType: '',
-        combustible: '',
-        disponibilidad: false
+        tipoDeCuerpo: '',
+        combustibleAC: '',
+        disponible_uso: false
       },
-
       newPublication: {
         vehiculo: {
           idVehiculo: '', // ID del vehículo
@@ -300,6 +305,7 @@ export default {
         editedPublication: {}, // Datos de la publicación que estamos editando
         showForm2: false, // Controla si el formulario de edición está visible
     };
+    
   },
   methods: {
     changeSection(section) {
@@ -421,6 +427,33 @@ export default {
           alert("No se pudo obtener la lista de publicaciones. Verifica tu conexión.");
         });
     },
+    async addVehiculo(){
+      const vehiculo = {
+        marca: this.newVehiculo.marca,
+        modelo: this.newVehiculo.modelo,
+        anio: this.newVehiculo.anio,
+        tipoTransmision: this.newVehiculo.tipoDeTransmision,
+        categoria: this.newVehiculo.categoria,
+        tipoCuerpo: this.newVehiculo.tipoDeCuerpo,
+        combustibleAC: this.newVehiculo.combustibleAC,
+        disponibilidad: [
+            "2024-12-24",
+            "2024-12-28",
+            "2025-01-03"
+        ],
+        devuelto: true,
+        disponible_uso: this.newVehiculo.disponible_uso
+      };
+      try{
+        const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "administradores/createVehiculo", vehiculo);
+        alert("Vehiculo creado correctamente.");
+
+      } catch(error){
+        console.error('Error al registrar el vehículo:', error);
+        alert('Hubo un problema al registrar el vehículo. Inténtalo nuevamente.');
+      }
+    }
+
   }
 };
 </script>
