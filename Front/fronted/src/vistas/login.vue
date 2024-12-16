@@ -82,6 +82,7 @@ export default{
         }
         if (datosUsuario.tipo_usuario == "Arrendatario"){
           alert("Credenciales válidas para arrendatario")
+          localStorage.setItem("userId", datosUsuario.idUsuario);
           window.location.href = '/arriendo'; 
           localStorage.setItem("login", JSON.stringify(datosUsuario));
           return 0;

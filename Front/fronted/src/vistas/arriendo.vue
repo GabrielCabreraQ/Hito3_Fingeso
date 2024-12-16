@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -7,10 +8,12 @@ const publicaciones = ref([]);
 const notifications = ref([]);
 const selectedSection = ref('Vizualizar Publicaciones');
 const menuItems = ref(['Vizualizar Publicaciones', 'Notificaciones', 'Cerrar Sesión']);
-const showForm = ref(false); // Estado para mostrar/ocultar el formulario
+const showForm = ref(false);
 
 const fechaInicio = ref('');
 const fechaFin = ref('');
+const idPublicacion = ref(null); // ID de la publicación seleccionada
+const arrendamientoExitoso = ref(false); // Flag para saber si el arriendo fue exitoso
 
 // Método para cambiar de sección
 function changeSection(section) {
@@ -27,6 +30,54 @@ async function cargarPublicaciones() {
   }
 }
 
+// Método para arrendar el vehículo
+async function arrendar(id) {
+
+  console.log("Publicación seleccionada con ID:", id);
+  idPublicacion.value = id; // Asigna el ID de la publicación seleccionada
+  showForm.value = true; // Muestra el formulario de arriendo
+}
+
+
+async function pagar() {
+  // Verificar si los valores son correctos
+  const userId = localStorage.getItem("userId");
+  console.log("Fecha de inicio:", fechaInicio.value);
+  console.log("Fecha de fin:", fechaFin.value);
+  console.log("ID de publicación:", idPublicacion.value);
+  
+  if (!userId) {
+    alert("No se encontró el ID del usuario. Por favor, inicia sesión nuevamente.");
+    return;
+  }
+  if (!fechaInicio.value || !fechaFin.value ) {
+    alert("Por favor, ingrese todas las fechas y seleccione una publicación.");
+    return;
+  }
+
+  // Crear el objeto con los datos para el arriendo
+  const arriendoData = {
+    idPublicacion: idPublicacion.value, // Usar el ID de la publicación seleccionada
+    fechaInicio: fechaInicio.value, // Usar la fecha de inicio del formulario
+    fechaFinal: fechaFin.value, // Usar la fecha de fin del formulario
+  };
+
+  try {
+    const response = await axios.post(`http://localhost:8080/arrendatarios/${userId}/arrendar`, arriendoData);
+    
+    if (response.status === 200) {
+      arrendamientoExitoso.value = true;
+      alert("Arriendo realizado con éxito!");
+    }
+  } catch (error) {
+    console.error("Error al realizar el arriendo:", error);
+    alert("Hubo un problema al realizar el arriendo.");
+  } finally {
+    showForm.value = false; // Ocultar el formulario después de intentar el pago
+  }
+}
+
+
 // Simular carga de notificaciones
 function cargarNotificaciones() {
   notifications.value = [
@@ -42,26 +93,20 @@ function deleteNotification(index) {
   notifications.value.splice(index, 1);
 }
 
-// Método para mostrar el formulario
-function arrendar() {
-  showForm.value = !showForm.value;
-}
-
-// Método para manejar el pago
-function pagar() {
-  if (fechaInicio.value && fechaFin.value) {
-    alert(`Pago realizado de ${fechaInicio.value} a ${fechaFin.value}`);
-    // Aquí podrías enviar la información al backend para procesar el pago
-  } else {
-    alert('Por favor, ingresa las fechas de inicio y fin.');
-  }
-}
-
 // Cargar datos al montar el componente
 onMounted(() => {
   cargarPublicaciones();
   cargarNotificaciones();
 });
+
+function direccionamientoMain(){
+  window.location.href = '/home'
+}
+async function cerrarSesion(){
+      // Limpiar la sesión (si es necesario)
+      localStorage.removeItem('login');
+      direccionamientoMain();
+    }
 </script>
 
 <template>
@@ -100,7 +145,7 @@ onMounted(() => {
               <p>Categoría: {{ publicacion.vehiculo.categoria }}</p>
               <p>Tipo de transmisión: {{ publicacion.vehiculo.tipoTransmision }}</p>
               <p>Disponibilidad: {{ publicacion.vehiculo.disponibilidad ? 'Disponible' : 'No Disponible' }}</p>
-              <button class="botones-arrendar" @click="arrendar">Arrendar</button>
+              <button class="botones-arrendar" @click="arrendar(publicacion.idPublicacion)">Arrendar</button>
             </div>
           </div>
         </div>
@@ -108,14 +153,14 @@ onMounted(() => {
         <!-- Formulario para arrendar -->
         <div v-if="showForm" class="formulario-arrendar">
           <h3>Formulario de Arriendo</h3>
-          <label for="fechaInicio">Fecha de Inicio:</label>
-          <input type="date" id="fechaInicio" v-model="fechaInicio" required />
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input type="date" id="fechaInicio" v-model="fechaInicio" required />
 
-          <label for="fechaFin">Fecha de Fin:</label>
-          <input type="date" id="fechaFin" v-model="fechaFin" required />
+            <label for="fechaFin">Fecha de Fin:</label>
+            <input type="date" id="fechaFin" v-model="fechaFin" required />
 
-          <button class="boton-pagar" @click="pagar">Pagar</button>
-        </div>
+            <button class="boton-pagar" @click.prevent="pagar">Pagar</button> <!-- Evitar el comportamiento predeterminado -->
+        </div>  
       </div>
 
       <!-- Sección Notificaciones -->
@@ -143,9 +188,11 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Sección Cerrar Sesión -->
-      <div v-if="selectedSection === 'Cerrar Sesión'">
-        <h2>Sesión cerrada</h2>
+      <!-- Cerrar Sesion -->
+      <div v-else-if="selectedSection === 'Cerrar Sesión'">
+        <div class="actions">
+          <button @click="cerrarSesion" class="menu-button">Cerrar Sesión</button>
+        </div>
       </div>
     </main>
   </div>
