@@ -16,6 +16,11 @@ const router = createRouter({
       name: 'Admin',
       component: () => import('../vistas/admin.vue'),
     },
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import('../vistas/login.vue'),
+    },
   ],
 });
 
