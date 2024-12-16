@@ -3,9 +3,8 @@
     <header class="menu-bar">
       <div class="logo">EasyWheels</div>
       <nav class="menu">
-        <button @click="goToLogin" class="menu-button">Iniciar Sesión</button>
-        <button @click="goToCatalog" class="menu-button">Catálogo</button>
-        <button @click="goToCustomerService" class="menu-button">Servicio al Cliente</button>
+        <button @click="goToRegister" class="menu-button">Registrarse</button>
+        <button @click="goToMain" class="menu-button">Menu de Inicio</button>
       </nav>
     </header>
 
@@ -21,25 +20,19 @@
         <div class="main-content">
           <div class="login-content">
               <div class="inputContainer" >
-                  <input class="mailRect" type="email" v-model="correo" placeholder="Ingrese correo electrónico">
+                  <input class="mailRect" type="email" v-model="this.correo" placeholder="Ingrese correo electrónico">
                   <br>
                   <br>
-                  <input class="psRect" type="password" v-model="password" placeholder="Ingrese contraseña">
+                  <input class="psRect" type="password" v-model="this.password" placeholder="Ingrese contraseña">
                   <br>
                   <br>
-                  <button class="sesionBtn" v-on:click="login()"> Iniciar Sesion </button>
-              </div>
-              <div class="otrosBtns">
-                <div class="otrosBoton" v-on:click="handleChange">Anónimo</div>
-                <div class="otrosBoton" v-on:click="goToRegister">Iniciar sesion</div>
+                  <button class="sesionBtn" v-on:click="login"> Iniciar Sesion </button>
               </div>
           </div>
         </div>
       </div>
     </main>
-
-    <!-- Aquí se agrega el RouterView para la navegación de rutas -->
-    <RouterView />
+    
   </div>
 </template>
 
@@ -51,10 +44,13 @@ function direccionamientoUsuarioAdmin(){
   window.location.href = '/admin';
 }
 function direccionamientoUsuarioArrendatario(){
-  window.location.href = '/arrendatario';
+  window.location.href = '/arriendo';
 }
-function direccionamientoUsuarioAnonimo(){
-  window.location.href = '/anonimo';
+function direccionamientoRegister(){
+  window.location.href = '/registerArrendatario';
+}
+function direccionamientoMain(){
+  window.location.href = '/home'
 }
 
 
@@ -69,48 +65,48 @@ export default{
   methods:{
     //funcionamiento asincronico
     async login(){
+      //Alerta en caso de que no se ingresen las credenciales correctamente
+      if (!this.correo || !this.password) {
+        alert("Debe ingresar correo y contraseña.");
+        return;  // Detener la ejecución si faltan campos
+      }
+
       // datos hacia el back
       const usuario = {
         'correo': this.correo,
         "password": this.password,
       };
+      
       try {
-        const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "usuarios/loginInt", usuario);
-        if (respuesta.data == 3){   //user gerente
-          return 0;
-        }
-        if (respuesta.data == 2){   //user arrendatario
-          return 0;
-        }
-        if (respuesta.data == 1){   //user admin
-          localStorage.setItem("login",JSON.stringify(this.correo));
+        const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + 
+        "usuarios/login?correo=" + this.correo + "&password=" + this.password);
+        const datosUsuario = respuesta.data;
+
+        if (datosUsuario.tipo_usuario == "Administrador"){   //user gerente
+          alert("Credenciales validas para administrador"),
+          this.correo = '',
+          this.password = '',
           direccionamientoUsuarioAdmin();
-        } else {                    //user mecanico
-          alert("Credenciales invalidas");
+          localStorage.setItem("login", JSON.stringify(datosUsuario));
           return 0;
         }
-        respuesta.data = 0;
+        if (datosUsuario.tipo_usuario == "Arrendatario"){   //user arrendatario
+          alert("Credenciales validas para arrendatario")
+          window.location.href = '/arriendo'; 
+          localStorage.setItem("login", JSON.stringify(datosUsuario));
+          return 0;
+        }
         console.log(respuesta.data);
       } catch (error){
-        alert("No se logró una conexión con el servidor");
+        alert("Datos ingresados no encontrados.");
       }
     },
-
-    goToLogin() {
-      this.$router.push('/login'); // Cambia la ruta según la lógica de tu aplicación
+    async goToRegister() {
+      direccionamientoRegister(); // Cambia la ruta según la lógica de tu aplicación
     },
-    goToCatalog() {
-      this.$router.push('/catalogo'); // Cambia la ruta según la lógica de tu aplicación
-    },
-    goToCustomerService() {
-      this.$router.push('/servicio-cliente'); // Cambia la ruta según la lógica de tu aplicación
-    },
-    startSearch() {
-      this.$router.push('/buscar'); // Cambia la ruta según la lógica de tu aplicación
-    },
-    goToRegister() {
-      this.$router.push('/register'); // Cambia la ruta según la lógica de tu aplicación
-    },
+    async goToMain(){
+      direccionamientoMain();
+    }
   }
 }
 
@@ -154,7 +150,7 @@ export default{
   display: grid;
   grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
   grid-template-rows: auto 1fr auto; /* Menú, contenido y pie de página */
-  background-image: url('https://media.istockphoto.com/id/959093634/es/vector/vector-abstracto-borrosa-pastel-colores-suave-gradiente-de-fondo.jpg?s=612x612&w=0&k=20&c=atXACiaxrVZFoTAv3S8pEgwyAd8Mn-zgY5UCkzD8eJo='); /* Cambia el URL aquí */
+  background-image: url('https://static.vecteezy.com/system/resources/thumbnails/017/049/365/small/dark-silver-gray-abstract-mosaic-background-vector.jpg'); /* Cambia el URL aquí */
   background-size: cover;
   background-position: center;
   background-attachment: fixed; /* Esto hace que el fondo se quede fijo al hacer scroll */

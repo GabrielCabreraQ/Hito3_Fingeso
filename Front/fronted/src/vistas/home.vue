@@ -6,6 +6,7 @@
           <button @click="goToLogin" class="menu-button">Iniciar Sesión</button>
           <button @click="goToCatalog" class="menu-button">Catálogo</button>
           <button @click="goToCustomerService" class="menu-button">Servicio al Cliente</button>
+          <button @click="goToRegister" class="menu-button">Registrarse</button>
         </nav>
       </header>
   
@@ -34,9 +35,6 @@
           </div>
         </div>
       </main>
-  
-      <!-- Aquí se agrega el RouterView para la navegación de rutas -->
-      <RouterView />
     </div>
   </template>
   
@@ -45,7 +43,7 @@
     name: 'Home',
     methods: {
       goToLogin() {
-        this.$router.push('/login'); // Cambia la ruta según la lógica de tu aplicación
+        window.location.href = '/login'; // Cambia la ruta según la lógica de tu aplicación
       },
       goToCatalog() {
         this.$router.push('/catalogo'); // Cambia la ruta según la lógica de tu aplicación
@@ -56,6 +54,9 @@
       startSearch() {
         this.$router.push('/buscar'); // Cambia la ruta según la lógica de tu aplicación
       },
+      goToRegister(){
+        window.location.href = '/registerArrendatario'
+      }
     },
   };
   </script>

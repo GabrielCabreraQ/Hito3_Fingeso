@@ -1,12 +1,11 @@
 <script setup>
-import Admin from './vistas/admin.vue'; // Importa el componente Admin directamente
+import Home from './vistas/home.vue'; // Importa el componente Admin directamente
 </script>
 
 <template>
-  <div id="app">
-    <Admin /> <!-- Renderiza el componente Admin directamente -->
-  </div>
+  <RouterView />
 </template>
+
 
 <style>
 /* Estilos generales para hacer la aplicación responsive */
