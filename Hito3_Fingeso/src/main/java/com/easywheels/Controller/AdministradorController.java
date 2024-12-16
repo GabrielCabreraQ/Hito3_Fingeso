@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/administradores")
+@CrossOrigin
 public class AdministradorController {
     @Autowired
     private AdministradorService administradorService;
