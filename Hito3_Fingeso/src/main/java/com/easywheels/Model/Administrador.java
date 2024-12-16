@@ -3,6 +3,7 @@ package com.easywheels.Model;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Administrador extends Usuario {
 
     // Constructor sin ID
     public Administrador(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario,
-                         Date fechaNacimiento, List<Notificacion> notificaciones, String departamento) {
+                         LocalDate fechaNacimiento, List<Notificacion> notificaciones, String departamento) {
         super(nombreUsuario, correoUsuario, contraseniaUsuario, telefonoUsuario, fechaNacimiento, notificaciones);
         this.departamento = departamento;
     }

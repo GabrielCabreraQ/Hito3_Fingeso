@@ -1,19 +1,18 @@
 package com.easywheels.Model;
 
 import jakarta.persistence.*;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Arriendo {
 
-    //Atributos
+    // Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false) //se relaciona con el atributo clienteID y no puede ser null
+    @JoinColumn(name = "cliente_id", nullable = false) // Se relaciona con el atributo clienteID y no puede ser null
     private Arrendatario arrendatario;
 
     @ManyToOne
@@ -21,16 +20,16 @@ public class Arriendo {
     private Vehiculo vehiculo;
 
     private int precio;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private LocalDate fechaInicio; // Cambiado a LocalDate
+    private LocalDate fechaFin;    // Cambiado a LocalDate
     private Boolean conformidad;
     private Boolean cancelado;
     @Transient
     private Boleta boleta = new Boleta();
 
-    //Constructor sin Boleta
+    // Constructor sin Boleta
     public Arriendo(Vehiculo vehiculo, Arrendatario arrendatario,
-                    int precio, Date fechaInicio, Date fechaFin,
+                    int precio, LocalDate fechaInicio, LocalDate fechaFin,
                     Boolean conformidad, Boolean cancelado) {
         this.vehiculo = vehiculo;
         this.arrendatario = arrendatario;
@@ -39,13 +38,12 @@ public class Arriendo {
         this.fechaFin = fechaFin;
         this.conformidad = conformidad;
         this.cancelado = cancelado;
-
     }
 
     public Arriendo() {
     }
 
-    public Arriendo(int id, Arrendatario arrendatario, Vehiculo vehiculo, int precio, Date fechaInicio, Date fechaFin, Boolean conformidad, Boolean cancelado, Boleta boleta) {
+    public Arriendo(int id, Arrendatario arrendatario, Vehiculo vehiculo, int precio, LocalDate fechaInicio, LocalDate fechaFin, Boolean conformidad, Boolean cancelado, Boleta boleta) {
         this.id = id;
         this.arrendatario = arrendatario;
         this.vehiculo = vehiculo;
@@ -89,19 +87,19 @@ public class Arriendo {
         this.precio = precio;
     }
 
-    public Date getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 

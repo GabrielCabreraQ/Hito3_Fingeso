@@ -3,6 +3,7 @@ package com.easywheels.Model;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 )
 public abstract class Usuario {
 
-    //Atributos
+    // Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idUsuario;
@@ -24,7 +25,7 @@ public abstract class Usuario {
     private String correoUsuario;
     private String contraseniaUsuario;
     private String telefonoUsuario;
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
     //private String rol;         // De igual modo hay que heredar para crear tipo de user
     @Transient
     private List<Notificacion> notificaciones;                                           // Agregar posteriormente
@@ -32,8 +33,8 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    //Constructor sin el ID
-    public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento, List<Notificacion> notificaciones) {
+    // Constructor sin el ID
+    public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, LocalDate fechaNacimiento, List<Notificacion> notificaciones) {
         this.nombreUsuario = nombreUsuario;
         this.correoUsuario = correoUsuario;
         this.contraseniaUsuario = contraseniaUsuario;
@@ -42,8 +43,8 @@ public abstract class Usuario {
         this.notificaciones = notificaciones;
     }
 
-    //Constructor para el registro
-    public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento) {
+    //constructor para el registro
+    public Usuario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, LocalDate fechaNacimiento) {
         this.nombreUsuario = nombreUsuario;
         this.correoUsuario = correoUsuario;
         this.contraseniaUsuario = contraseniaUsuario;
@@ -51,7 +52,6 @@ public abstract class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    //Getters y setters
     public long getIdUsuario() {
         return idUsuario;
     }
@@ -92,11 +92,11 @@ public abstract class Usuario {
         this.telefonoUsuario = telefonoUsuario;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

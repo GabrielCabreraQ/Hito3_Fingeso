@@ -2,6 +2,7 @@ package com.easywheels.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @DiscriminatorValue("arrendatario")
 public class Arrendatario extends Usuario{
 
-    //Atributos
+    // Atributos
     @ElementCollection
     private List<String> tipoLicencia;
     @ElementCollection
@@ -22,7 +23,7 @@ public class Arrendatario extends Usuario{
     public Arrendatario() {
     }
 
-    public Arrendatario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, Date fechaNacimiento, List<String> tipoLicencia, List<String> documentos) {
+    public Arrendatario(String nombreUsuario, String correoUsuario, String contraseniaUsuario, String telefonoUsuario, LocalDate fechaNacimiento, List<String> tipoLicencia, List<String> documentos) {
         super(nombreUsuario, correoUsuario, contraseniaUsuario, telefonoUsuario, fechaNacimiento);
         this.tipoLicencia = tipoLicencia;
         this.documentos = documentos;
