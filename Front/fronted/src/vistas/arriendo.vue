@@ -23,7 +23,7 @@ function changeSection(section) {
 // Método para cargar publicaciones desde el backend
 async function cargarPublicaciones() {
   try {
-    const response = await axios.get('http://localhost:8080/publicaciones');
+    const response = await axios.get('http://localhost:8080/publicaciones/visibles');
     publicaciones.value = response.data;
   } catch (error) {
     console.error('Error al cargar las publicaciones:', error);
@@ -71,7 +71,7 @@ async function pagar() {
     }
   } catch (error) {
     console.error("Error al realizar el arriendo:", error);
-    alert("Hubo un problema al realizar el arriendo.");
+    alert("Hubo un problema al realizar el arriendo. Posiblemente el vehiculo ya este arrendado en esa fecha.");
   } finally {
     showForm.value = false; // Ocultar el formulario después de intentar el pago
   }
@@ -81,10 +81,8 @@ async function pagar() {
 // Simular carga de notificaciones
 function cargarNotificaciones() {
   notifications.value = [
-    { titulo: "responde", mensaje: "responde pendejo" },
-    { titulo: "porque", mensaje: "respondeme" },
-    { titulo: "Historia sin sentido", mensaje: "¿Han visto historias animes sin sentido que no avanzan?" },
-    { titulo: "Divertido", mensaje: "Saltos de línea inesperados...\n\n¡Merequetengue!" },
+    { titulo: "Oferta Imperdible!!!!", mensaje: "Cyber monday" },
+    { titulo: "Se ha cancelado su reserva", mensaje: "Su reserva hecha el dia 19/08/2024 fue cancenlada debido a una falla del vehiculo" },
   ];
 }
 

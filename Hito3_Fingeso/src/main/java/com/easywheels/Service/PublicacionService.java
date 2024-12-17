@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PublicacionService {
@@ -47,6 +48,11 @@ public class PublicacionService {
 
     public List<Publicacion> getAllPublicaciones() {
         return publicacionRepository.findAll();
+    }
+
+    // Método para obtener todas las publicaciones con visibilidad en true
+    public List<Publicacion> obtenerPublicacionesVisibles() {
+        return publicacionRepository.findByVisibilidadTrue();
     }
 
     //Actualizar datos de una publicación
