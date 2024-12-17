@@ -51,6 +51,12 @@ public class PublicacionController {
         return publicacionService.getAllPublicaciones();
     }
 
+    @GetMapping("/visibles")
+    public ResponseEntity<List<Publicacion>> obtenerPublicacionesVisibles() {
+        List<Publicacion> publicacionesVisibles = publicacionService.obtenerPublicacionesVisibles();
+        return ResponseEntity.ok(publicacionesVisibles);
+    }
+
     //Actualizar una publicación existente
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePublicacion(@PathVariable int id, @RequestBody Publicacion publicacion, @RequestParam String permiso) {

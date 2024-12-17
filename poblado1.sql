@@ -3,12 +3,12 @@ insert into usuario (nombre_usuario,correo_usuario,contrasenia_usuario,
 		telefono_usuario,fecha_nacimiento,tipo_usuario,departamento)
 values
 	('Isaac Espinoza','piscolix@gmail.com','cc34','975956424','1991-04-09','administrador','Valdivia'),
-	('Benjamin Vicuña','wachito@gmail.com','estoyverde','972253424','2000-04-03','administrador','Valdivia'),
-	('Cristobal Briceño','fothermuckers@gmail.com','googlemija','975556424','1996-09-19','arrendatario',null),
-	('Rodrigo Vasquez','altoyoyo@gmail.com','lavidita','956956424','1990-09-19','arrendatario',null),
-	('Esteban Paredes','216@gmail.com','robateunatele','975955224','2002-02-23','arrendatario',null),
-	('Juan Manuel Zolezzi','zolezzi@gmail.com','triplezeta','975956477','1900-05-20','administrador','Santiago'),
-	('Camila Vallejos','cami.va@gob.cl','elcomunismofunciona','947563381','1988-04-28','mecanico','Santiago');
+	('Francisco Riquelme','francisco.riquelme@usach.cl','1234','972253424','2000-04-03','administrador','Santiago'),
+	('Cristobal Briceño','cristobal@gmail.com','1234','975556424','1996-09-19','arrendatario',null),
+	('Rodrigo Vasquez','altoyoyo@gmail.com','1234','956956424','1990-09-19','arrendatario',null),
+	('Esteban Paredes','esteban@gmail.com','1234','975955224','2002-02-23','arrendatario',null),
+	('Juan Manuel','juan@gmail.com','1234','975956477','1900-05-20','administrador','Santiago'),
+	('Camila Vallejos','cami.va@gob.cl','1234','947563381','1988-04-28','administrador','Santiago');
 
 insert into arrendatario_documentos (arrendatario_id_usuario,documentos)
 values (3,'Cedulo Identidad');
@@ -46,11 +46,10 @@ values
 
 insert into publicacion (id_vehiculo,codigoacriss,precio_normal,visibilidad,id_catalogo)
 values
-	(1,null,30000, true, 1),
-	(2,null,50000, true, 1),-- mi idea es que el codigo acrris se genere automaticamente con los datos del auto
-	(3,null,50000, false, 1),
-	(4,null,45000, true, 1),
-	(5,null,35000, true, 2);
+    (1, 'MMBR', 30000, true, 1),
+    (2, 'NNCN', 50000, true, 1),
+    (3, 'CEDD', 50000, true, 1),
+    (4, 'AHWQ', 45000, true, 1);
 
 
 insert into arriendo (cliente_id,vehiculo_id,precio,fecha_inicio,fecha_fin,conformidad,cancelado)
