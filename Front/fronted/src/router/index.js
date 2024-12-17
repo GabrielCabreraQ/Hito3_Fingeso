@@ -34,6 +34,11 @@ const router = createRouter({
       name: 'Arriendo',
       component: () => import('../vistas/arriendo.vue'),
     },
+    {
+      path: '/visita',
+      name: 'visita',
+      component: () => import('../vistas/visita.vue'),
+    },
   ],
 });
 

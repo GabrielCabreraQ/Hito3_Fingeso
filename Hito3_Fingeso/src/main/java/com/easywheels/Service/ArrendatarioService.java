@@ -86,7 +86,7 @@ public class ArrendatarioService {
 
         // Crear el arriendo (sin configurar el ID)
         Arriendo arriendo = new Arriendo();
-        arriendo.setCancelado(false);
+        arriendo.setCancelado(true);
         arriendo.setConformidad(false);
         arriendo.setPrecio(precioTotal);
         arriendo.setFechaInicio(fechaInicio);

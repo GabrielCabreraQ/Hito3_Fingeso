@@ -52,7 +52,7 @@
         this.$router.push('/servicio-cliente'); // Cambia la ruta según la lógica de tu aplicación
       },
       startSearch() {
-        this.$router.push('/buscar'); // Cambia la ruta según la lógica de tu aplicación
+        this.$router.push('/visita');
       },
       goToRegister(){
         window.location.href = '/registerArrendatario'

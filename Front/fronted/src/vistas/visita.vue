@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -6,7 +7,7 @@ import axios from 'axios';
 const publicaciones = ref([]);
 const notifications = ref([]);
 const selectedSection = ref('Vizualizar Publicaciones');
-const menuItems = ref(['Vizualizar Publicaciones', 'Notificaciones', 'Cerrar Sesión']);
+const menuItems = ref(['Vizualizar Publicaciones', 'Notificaciones', 'Salir']);
 const showForm = ref(false);
 
 const fechaInicio = ref('');
@@ -29,51 +30,10 @@ async function cargarPublicaciones() {
   }
 }
 
-// Método para arrendar el vehículo
-async function arrendar(id) {
-
-  console.log("Publicación seleccionada con ID:", id);
-  idPublicacion.value = id; // Asigna el ID de la publicación seleccionada
-  showForm.value = true; // Muestra el formulario de arriendo
-}
-
-
-async function pagar() {
-  // Verificar si los valores son correctos
-  const userId = localStorage.getItem("userId");
-  console.log("Fecha de inicio:", fechaInicio.value);
-  console.log("Fecha de fin:", fechaFin.value);
-  console.log("ID de publicación:", idPublicacion.value);
-  
-  if (!userId) {
-    alert("No se encontró el ID del usuario. Por favor, inicia sesión nuevamente.");
-    return;
-  }
-  if (!fechaInicio.value || !fechaFin.value ) {
-    alert("Por favor, ingrese todas las fechas y seleccione una publicación.");
-    return;
-  }
-
-  // Crear el objeto con los datos para el arriendo
-  const arriendoData = {
-    idPublicacion: idPublicacion.value, // Usar el ID de la publicación seleccionada
-    fechaInicio: fechaInicio.value, // Usar la fecha de inicio del formulario
-    fechaFinal: fechaFin.value, // Usar la fecha de fin del formulario
-  };
-
-  try {
-    const response = await axios.post(`http://localhost:8080/arrendatarios/${userId}/arrendar`, arriendoData);
-    
-    if (response.status === 200) {
-      arrendamientoExitoso.value = true;
-      alert("Arriendo realizado con éxito!");
-    }
-  } catch (error) {
-    console.error("Error al realizar el arriendo:", error);
-    alert("Hubo un problema al realizar el arriendo. Posiblemente el vehiculo ya este arrendado en esa fecha.");
-  } finally {
-    showForm.value = false; // Ocultar el formulario después de intentar el pago
-  }
+// Método para redirigir a registerArrendatario.vue
+async function arrendar() {
+  // Redirigir directamente a la vista de registro de arrendatarios
+  window.location.href = '/registerArrendatario'
 }
 
 
@@ -81,7 +41,7 @@ async function pagar() {
 function cargarNotificaciones() {
   notifications.value = [
     { titulo: "Oferta Imperdible!!!!", mensaje: "Cyber monday" },
-    { titulo: "Se ha cancelado su reserva", mensaje: "Su reserva hecha el dia 19/08/2024 fue cancenlada debido a una falla del vehiculo" },
+    { titulo: "Recordatorio", mensaje: "No te olvides de registrarte antes de arrendar!" },
   ];
 }
 
@@ -155,7 +115,7 @@ async function cerrarSesion(){
 
             <label for="fechaFin">Fecha de Fin:</label>
             <input type="date" id="fechaFin" v-model="fechaFin" required />
-          
+
             <button class="boton-pagar" @click.prevent="pagar">Pagar</button> <!-- Evitar el comportamiento predeterminado -->
         </div>  
       </div>
@@ -186,9 +146,9 @@ async function cerrarSesion(){
       </div>
 
       <!-- Cerrar Sesion -->
-      <div v-else-if="selectedSection === 'Cerrar Sesión'">
+      <div v-else-if="selectedSection === 'Salir'">
         <div class="actions">
-          <button @click="cerrarSesion" class="menu-button">Cerrar Sesión</button>
+          <button @click="cerrarSesion" class="menu-button">Salir</button>
         </div>
       </div>
     </main>
