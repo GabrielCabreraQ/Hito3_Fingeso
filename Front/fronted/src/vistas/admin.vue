@@ -8,7 +8,7 @@
     <!-- Menú Lateral -->
     <aside class="sidebar">
       <div class="user-info">
-        <div class="user-name">Nombre del Usuario</div>
+        <div class="user-name">EasyWheels</div>
       </div>
       <nav>
         <ul>
@@ -186,44 +186,38 @@
           </form>
         </div>
 
-        <div v-if = "isEditVehiculo">
-          <form @submit.prevent = "updateVehiculo">
-            <div class="scrollable-table-container">
-              <div class="form-group">
-                <label for="marca">Marca</label>
-                <input type="text" id="marca" v-model="newVehiculo.marca" required />
-              </div>
-              <div class="form-group">
-                <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" v-model="newVehiculo.modelo" required />
-              </div>
-              <div class="form-group">
-                <label for="anio">Año</label>
-                <input type="number" id="anio" v-model="newVehiculo.anio" required />
-              </div>
-              <div class="form-group">
-                <label for="transmisionTipe">Tipo de transmisión</label>
-                <input type="text" id="transmisionTipe" v-model="newVehiculo.tipoDeTransmision" required />
-              </div>
-              <div class="form-group">
-                <label for="categoria">Categoría</label>
-                <input type="text" id="categoria" v-model="newVehiculo.categoria" required />
-              </div>
-              <div class="form-group">
-                <label for="BodyType">Tipo de Cuerpo</label>
-                <input type="text" id="BodyType" v-model="newVehiculo.tipoDeCuerpo" required />
-              </div>
-              <div class="form-group">
-                <label for="combustible">Combustible</label>
-                <input type="text" id="combustible" v-model="newVehiculo.combustibleAC" required />
-              </div>
-              <div class="form-group">
-                <label for="disponibilidad">Disponible para arrendar</label>
-                <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
-              </div>
-              <button type="submit">{{ isEditing ? 'Confirmar cambios' : 'Guardar publicación' }}</button>
-              <button type="button" @click="cancelEdit" class="cancel-button">Cancelar</button>
-            </div>
+        <div v-if="isEditVehiculo" class="edit-form">
+          <h3>Editar Vehículo</h3>
+          <form @submit.prevent="updateVehiculo">
+            <label for="id_vehiculo">Id Vehiculo:</label>
+            <input type="text" id="id_vehiculo" v-model="currentVehiculo.id_vehiculo" required />
+
+            <label for="marca">Marca:</label>
+            <input type="text" id="marca" v-model="currentVehiculo.marca" required />
+
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" v-model="currentVehiculo.modelo" required />
+
+            <label for="anio">Año:</label>
+            <input type="number" id="anio" v-model="currentVehiculo.anio" required />
+
+            <label for="transmision">Tipo de Transmisión:</label>
+            <input type="text" id="transmision" v-model="currentVehiculo.tipoDeTransmision" required />
+
+            <label for="categoria">Categoría:</label>
+            <input type="text" id="categoria" v-model="currentVehiculo.categoria" required />
+
+            <label for="tipoCuerpo">Tipo de Cuerpo:</label>
+            <input type="text" id="tipoCuerpo" v-model="currentVehiculo.tipo_cuerpo" required />
+
+            <label for="combustible">Combustible:</label>
+            <input type="text" id="combustible" v-model="currentVehiculo.combustibleAC" required />
+
+            <label for="disponibilidad">Disponible para arrendar:</label>
+            <input type="checkbox" id="disponibilidad" v-model="currentVehiculo.disponible_uso" />
+
+            <button type="submit">Confirmar cambios</button>
+            <button type="button" @click="cancelEdit" class="cancel-button">Cancelar</button>
           </form>
         </div>
         
@@ -380,6 +374,20 @@ export default {
         visibilidad: true, // Visibilidad
         },
 
+        currentVehiculo: {
+          id_vehiculo: '',
+          marca: '',
+          modelo: '',
+          anio: null,
+          tipoDeTransmision: '',
+          categoria: '',
+          tipo_cuerpo: '',
+          combustibleAC: '',
+          disponible_uso: false
+        },
+
+        vehiculos: [], // Lista de vehículos
+        
         publications: [], // Lista de publicaciones
         isEditing: false, // Controla si el formulario de edición está visible
         editedPublication: {}, // Datos de la publicación que estamos editando
@@ -413,16 +421,19 @@ export default {
       this.showForm = false;
       this.showForm2 = false;
       this.showForm3 = false;
+      this.isEditVehiculo = false;
     },
-    computed: {
-    currentPublication() {
-      return this.isEditing ? this.editedPublication : this.newPublication;
-    }},
+
     editPublication(publication) {
       this.isEditing = true; // Activar el modo de edición
       this.currentPublication = { ...publication }; // Copiar los datos de la publicación seleccionada
       this.showForm2 = true; // Mostrar el formulario de edición
     },
+    editVehiculo(vehiculo) {
+      this.isEditVehiculo = true; // Activar el modo de edición
+      this.currentVehiculo = { ...vehiculo }; // Copiar los datos de la publicación seleccionada
+    },
+
     // Método para editar una publicación
     async updatePublication() {
       if (!this.currentPublication || !this.currentPublication.vehiculo) {
@@ -548,7 +559,7 @@ export default {
         anio: this.newVehiculo.anio,
         tipoTransmision: this.newVehiculo.tipoDeTransmision,
         categoria: this.newVehiculo.categoria,
-        tipoCuerpo: this.newVehiculo.tipoDeCuerpo,
+        tipo_cuerpo: this.newVehiculo.tipoDeCuerpo,
         combustibleAC: this.newVehiculo.combustibleAC,
         disponibilidad: [
             "2024-12-24",
@@ -609,9 +620,50 @@ export default {
           alert('Hubo un problema al gestionar la devolucion del vehículo en disponible. Inténtalo nuevamente.');
         }
       }
-      
-
     },
+
+    async updateVehiculo() {
+      // Verificamos si el vehículo actual está definido
+      if (!this.currentVehiculo) {
+        console.error("El vehículo no está definido.");
+        return;
+      }
+
+      const vehiculoToUpdate = {
+        id_vehiculo: this.currentVehiculo.id_vehiculo,
+        marca: this.currentVehiculo.marca,
+        modelo: this.currentVehiculo.modelo,
+        anio: this.currentVehiculo.anio,
+        tipoTransmision: this.currentVehiculo.tipoDeTransmision,
+        categoria: this.currentVehiculo.categoria,
+        tipoCuerpo: this.currentVehiculo.tipoDeCuerpo,
+        combustibleAC: this.currentVehiculo.combustibleAC,
+        disponibilidad: [
+            "2024-12-24",
+            "2024-12-28",
+            "2025-01-03"
+        ],
+        devuelto: this.currentVehiculo.devuelto,
+        disponible_uso: this.currentVehiculo.disponible_uso
+      };
+
+      // Intentamos hacer la solicitud PUT para actualizar el vehículo
+      try {
+        const response = await axios.put(
+          `${import.meta.env.VITE_BASE_URL}vehiculos/${this.currentVehiculo.id_vehiculo}?permiso=administrador`,
+          vehiculoToUpdate
+        );
+        console.log('Vehículo actualizado:', response.data);
+        // Opcional: Llamamos a un método para actualizar la lista de vehículos o hacer algo con la respuesta
+        this.fetchVehiculos(); // Suponiendo que tienes un método fetchVehiculos para obtener la lista actualizada
+        this.isEditing = false; // Si usas un flag para controlar el estado de edición
+        this.showForm = false;  // Si tienes un formulario para ocultar después de la actualización
+        this.isEditVehiculo = false;
+      } catch (error) {
+        console.error('Error al actualizar el vehículo:', error);
+        alert('No se pudo actualizar el vehículo. Verifica tu conexión.');
+      }
+    }
 
   },
   created() {
@@ -1010,4 +1062,62 @@ form input[type="checkbox"] {
   background-color: #e53935;
 }
 
+.edit-form {
+  max-height: 400px; /* Altura máxima del formulario */
+  overflow-y: auto; /* Scroll vertical si el contenido excede la altura */
+  padding: 20px; /* Espacio interno */
+  border: 1px solid #ccc; /* Borde para darle estilo */
+  border-radius: 8px; /* Bordes redondeados */
+  background-color: #f9f9f9; /* Fondo suave */
+}
+
+.edit-form h3 {
+  text-align: center; /* Centrar el título */
+  margin-bottom: 15px;
+}
+
+.edit-form form {
+  display: flex;
+  flex-direction: column; /* Campos en columna */
+}
+
+.edit-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.edit-form input {
+  margin-bottom: 15px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.edit-form input[type="checkbox"] {
+  width: auto; /* Ajustar tamaño del checkbox */
+  margin-bottom: 15px;
+}
+
+.edit-form button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: white;
+}
+
+.edit-form button[type="submit"] {
+  background-color: #4CAF50; /* Botón de confirmación verde */
+}
+
+.edit-form .cancel-button {
+  background-color: #f44336; /* Botón de cancelar rojo */
+  margin-top: 10px;
+}
+
+.edit-form button:hover {
+  opacity: 0.9;
+}
 </style>
