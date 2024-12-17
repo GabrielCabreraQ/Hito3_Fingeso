@@ -141,6 +141,7 @@ async function cerrarSesion(){
               <h3>{{ publicacion.vehiculo.marca }} - {{ publicacion.vehiculo.anio }}</h3>
               <p>Precio: ${{ publicacion.precioNormal }}</p>
               <p>Categoría: {{ publicacion.vehiculo.categoria }}</p>
+              <p>Modelo: {{ publicacion.vehiculo.modelo }}</p>
               <p>Tipo de transmisión: {{ publicacion.vehiculo.tipoTransmision }}</p>
               <p>Disponibilidad: {{ publicacion.vehiculo.disponibilidad ? 'Disponible' : 'No Disponible' }}</p>
               <button class="botones-arrendar" @click="arrendar(publicacion.idPublicacion)">Arrendar</button>
