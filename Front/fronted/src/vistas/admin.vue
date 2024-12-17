@@ -166,7 +166,7 @@
             <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
           </div>
           <button type="submit" class="submit-button">Guardar Vehículo</button>
-          <button type="button" @click="showForm = false" class="cancel-button">Cancelar</button>
+          <button type="button" @click="cancelEdit" class="cancel-button">Cancelar</button>
         </form>
         </div>
         </div>
@@ -182,13 +182,54 @@
               <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
             </div>
             <button type="submit" class="submit-button">Guardar Cambios</button>
-            <button type="button" @click="showForm3 = false" class="cancel-button">Cancelar</button>
+            <button type="button" @click="cancelEdit" class="cancel-button">Cancelar</button>
+          </form>
+        </div>
+
+        <div v-if = "isEditVehiculo">
+          <form @submit.prevent = "updateVehiculo">
+            <div class="scrollable-table-container">
+              <div class="form-group">
+                <label for="marca">Marca</label>
+                <input type="text" id="marca" v-model="newVehiculo.marca" required />
+              </div>
+              <div class="form-group">
+                <label for="modelo">Modelo</label>
+                <input type="text" id="modelo" v-model="newVehiculo.modelo" required />
+              </div>
+              <div class="form-group">
+                <label for="anio">Año</label>
+                <input type="number" id="anio" v-model="newVehiculo.anio" required />
+              </div>
+              <div class="form-group">
+                <label for="transmisionTipe">Tipo de transmisión</label>
+                <input type="text" id="transmisionTipe" v-model="newVehiculo.tipoDeTransmision" required />
+              </div>
+              <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <input type="text" id="categoria" v-model="newVehiculo.categoria" required />
+              </div>
+              <div class="form-group">
+                <label for="BodyType">Tipo de Cuerpo</label>
+                <input type="text" id="BodyType" v-model="newVehiculo.tipoDeCuerpo" required />
+              </div>
+              <div class="form-group">
+                <label for="combustible">Combustible</label>
+                <input type="text" id="combustible" v-model="newVehiculo.combustibleAC" required />
+              </div>
+              <div class="form-group">
+                <label for="disponibilidad">Disponible para arrendar</label>
+                <input type="checkbox" id="disponibilidad" v-model="newVehiculo.disponible_uso" />
+              </div>
+              <button type="submit">{{ isEditing ? 'Confirmar cambios' : 'Guardar publicación' }}</button>
+              <button type="button" @click="cancelEdit" class="cancel-button">Cancelar</button>
+            </div>
           </form>
         </div>
         
 
         <!-- Mostrar tabla de vehículos si showForm es false -->
-        <div v-if =" !showForm && !showForm3">
+        <div v-if =" !showForm && !showForm3 && !isEditVehiculo">
           <div class="scrollable-table-container">
             <table class="vehiculo-table">
               <thead>
@@ -201,6 +242,8 @@
                   <th>Categoría</th>
                   <th>Combustible</th>
                   <th>Disponible Para Arrendar</th>
+                  <th>Modificar Vehiculo</th>
+                  <th>Eliminar Vehiculo</th>
                 </tr>
               </thead>
               <tbody>
@@ -213,6 +256,12 @@
                   <td>{{ vehiculo.categoria }}</td>
                   <td>{{ vehiculo.combustibleAC }}</td>
                   <td>{{ vehiculo.disponible_uso ? 'Sí' : 'No' }}</td>
+                  <td>
+                    <button class="edit-button" @click="editVehiculo(vehiculo)">✏️</button>
+                  </td>
+                  <td>
+                    <button class="delete-button" @click="deleteVehiculo(vehiculo.idVehiculo)">🗑️</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -308,7 +357,6 @@ export default {
       selectedSection: "Gestión de Publicaciones",
       showForm: false,
       newVehiculo: {
-        id_vehiculo: '',
         marca: '',
         modelo: '',
         anio: '',
@@ -316,6 +364,11 @@ export default {
         categoria: '',
         tipoDeCuerpo: '',
         combustibleAC: '',
+        disponibilidad: [
+            "2024-12-24",
+            "2024-12-28",
+            "2025-01-03"
+        ],
         disponible_uso: false
       },
       newPublication: {
@@ -332,8 +385,8 @@ export default {
         editedPublication: {}, // Datos de la publicación que estamos editando
         showForm2: false, // Controla si el formulario de edición está visible
         showForm3: false,
+        isEditVehiculo: false, //Controla si se esta o no editando un vehiculo
     };
-    
   },
   methods: {
     changeSection(section) {
@@ -354,10 +407,10 @@ export default {
       this.publications.push(this.newPublication);
       this.showForm = false;
     },
-
     // Método para cancelar la edición y cerrar el formulario
     cancelEdit() {
       this.isEditing = false;
+      this.showForm = false;
       this.showForm2 = false;
       this.showForm3 = false;
     },
@@ -365,7 +418,6 @@ export default {
     currentPublication() {
       return this.isEditing ? this.editedPublication : this.newPublication;
     }},
-
     editPublication(publication) {
       this.isEditing = true; // Activar el modo de edición
       this.currentPublication = { ...publication }; // Copiar los datos de la publicación seleccionada
@@ -399,7 +451,6 @@ export default {
         alert('No se pudo actualizar la publicación. Verifica tu conexión.');
       }
     },
-
     async deletePublication(idPublicacion) {
       if (!confirm("¿Estás seguro de que deseas eliminar esta publicación?")) {
         return; // Cancelar si el usuario no confirma
@@ -415,6 +466,23 @@ export default {
         this.fetchPublications();
       } catch (error) {
         alert("Publicación eliminada exitosamente.");
+      }
+    },
+
+    async deleteVehiculo(idVehiculo){
+      if (!confirm("¿Estás seguro de que deseas eliminar este vehiculo?")) {
+        return; // Cancelar si el usuario no confirma
+      }
+      try{
+        const response = await axios.delete(
+          `${import.meta.env.VITE_BASE_URL}vehiculos/${idVehiculo}?permiso=administrador`
+        );
+        console.log("Publicación eliminada:", response.data);
+        alert("Vehiculo eliminado correctamente.")
+        // Actualiza la lista de publicaciones
+        this.fetchVehiculos();
+      }catch(error){
+        alert("No se pudo eliminar vehiculo. Posiblemente este asociado a un arriendo.");
       }
     },
 
@@ -493,6 +561,7 @@ export default {
       try{
         const respuesta = await axios.post(import.meta.env.VITE_BASE_URL + "administradores/createVehiculo", vehiculo);
         alert("Vehiculo creado correctamente.");
+        this.showForm = false;
         // Limpiar los campos del formulario
         this.newVehiculo = {
             marca: '',
@@ -522,7 +591,8 @@ export default {
           this.newVehiculo.id_vehiculo +"/devolucion?observaciones=No tiene fallas");
           alert("Gestion del Vehiculo exitosa.");
           this.newVehiculo.id_vehiculo = '',
-          this.newVehiculo.disponible_uso = false
+          this.newVehiculo.disponible_uso = false;
+          this.showForm3 = false;
         }catch(error){
           console.error('Error al gestionar la devolucion del vehiculo:', error);
           alert('Hubo un problema al gestionar la devolucion del vehículo en disponible. Inténtalo nuevamente.');
